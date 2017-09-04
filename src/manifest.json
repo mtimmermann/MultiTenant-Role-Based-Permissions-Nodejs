@@ -1,0 +1,24 @@
+{
+	"name": "Boilerplate Role Based Permissions Nodejs",
+	"short_name": "Boilerplate",
+	"icons": [{
+				"src": "/img/ico/icon-128x128.png",
+				"sizes": "128x128",
+				"type": "image/png"
+			}, {
+				"src": "/img/ico/apple-touch-icon.png",
+				"sizes": "180x180",
+				"type": "image/png"
+			}, {
+				"src": "/img/ico/mstile-150x150.png",
+				"sizes": "150x150",
+				"type": "image/png"
+			}, {
+				"src": "/img/ico/chrome-touch-icon-192x192.png",
+				"sizes": "192x192",
+				"type": "image/png"
+			}],
+	"start_url": "/index.html",
+	"display": "standalone",
+	"theme_color": "#263238"
+}

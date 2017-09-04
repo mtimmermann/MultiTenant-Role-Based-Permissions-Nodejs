@@ -1,0 +1,60 @@
+@import '_mixins';
+@import 'bootstrap-overrides';
+@import 'margin-padding';
+@import 'site-branding';
+
+body {
+  font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.43;
+  color: #484848;
+}
+
+.form-inline {
+  .form-group {
+    margin-right: 5px;
+  }
+}
+
+.modal-content {
+	.modal-footer {
+		@include border-radius(6px);
+		background-color: #f5f5f5;
+	}
+}
+
+.form-header {
+  h4 {
+    font-weight: bold;
+  }
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+/**
+ * Fade in/out transitions
+ */
+.transition-enter {
+  opacity: 0.01;
+}
+.transition-enter.transition-enter-active {
+  opacity: 1;
+  transition: 700ms;
+}
+.example-leave {
+  opacity: 1;
+}
+.transition-leave.transition-leave-active {
+  opacity: 0.01;
+  transition: 700ms;
+}
+
+// React Table (react-table) tweaks
+// Fixed table body not displaying in Chrome etc.
+// and the paging buttons filling up height 100%
+.ReactTable {
+  display: block !important;
+  .-pagination .-btn {
+    height: auto !important;
+  }
+}

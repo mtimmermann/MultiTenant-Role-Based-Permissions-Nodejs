@@ -1,0 +1,25 @@
+{
+	"version": "1.0.0",
+	"name": "Boilerplate Role Based Permissions Nodejs",
+	"launch_path": "/index.html",
+	"description": "Boilerplate role based permissions, local passport authentication",
+	"icons": {
+		"128": "/img/ico/icon-128x128.png"
+	},
+	"developer": {
+		"name": "",
+		"url": ""
+	},
+	"installs_allowed_from": [
+		"*"
+	],
+	"default_locale": "en",
+	"permissions": {
+	},
+	"locales": {
+		"en": {
+			"name": "Boilerplate Role Based Permissions Nodejs",
+			"description": "Boilerplate role based permissions, local passport authentication"
+		}
+	}
+}
