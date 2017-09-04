@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const config = require('./server/config');
+const SubDomains = require('./server/config/sub-domains');
 
 // Connect to the database and load models
 require('./server/models').connect(config.dbUri);
@@ -42,25 +43,30 @@ passport.use('local-login', localLoginStrategy);
 app.set('views', path.join(__dirname, '/server/views'));
 app.set('view engine', 'pug');
 
+
 // Serve static assets normally
-app.use(express.static(path.join(__dirname, '/dist')));
+//app.use(express.static(path.join(__dirname, '/dist')));
+
+// Serve static assets with file extensions
+app.get(/\.(\w+)$/, function (req, res, next) {
+  res.sendFile(path.join(__dirname, 'dist', req.path));
+});
 
 // Define routes
 app.use('/auth', auth);
 app.use('/api', api);
 
 
-// Catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
-
 // Single page app method for 404s, return the static html file
 // Handles all routes so you do not get a not found error
+// Serve the subdomain html file
 app.get('*', function (req, res, next) {
-  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+  const subdomain = SubDomains.match(req.subdomains);
+  if (subdomain) {
+    res.sendFile(path.resolve(__dirname, 'dist', `client-html/${subdomain}.html`));
+  } else {
+    res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+  }
 });
 
 
