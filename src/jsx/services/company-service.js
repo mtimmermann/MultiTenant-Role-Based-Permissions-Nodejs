@@ -39,9 +39,23 @@ const CompanyService = {
                        error {object}: null if no error
                        data {object}: The data set of a succesful call
    */
-  newCustomer: (company, callback) => {
+  newCompany: (company, callback) => {
     if (!$.isFunction(callback)) throw new Error('callback function is required');
     Request.post('/api/companies', JSON.stringify({ company /* :company */ }), callback);
+  },
+
+  /**
+   * Update a company
+   *
+   * @param {object}   company company object to update
+   * @param {function} callback (err, data)
+                       The function that is called after a service call
+                       error {object}: null if no error
+                       data {object}: The data set of a succesful call
+   */
+  updateCompany: (company, callback) => {
+    if (!$.isFunction(callback)) throw new Error('callback function is required');
+    Request.put('/api/companies', JSON.stringify({ company /* :company */ }), callback);
   }
 };
 

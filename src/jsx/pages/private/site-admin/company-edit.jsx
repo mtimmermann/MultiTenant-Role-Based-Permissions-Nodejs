@@ -31,7 +31,7 @@ class CompanyEdit extends Component {
   submit(evt) {
     evt.preventDefault();
 
-    CompanyService.updateCustomer(this.state.company, (err, data) => {
+    CompanyService.updateCompany(this.state.company, (err, data) => {
       if (err || (data && !data.success)) {
         this.setState({ errors: data && data.errors ? data.errors : [err.message] });
       } else if (data && data.success) {

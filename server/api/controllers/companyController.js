@@ -64,7 +64,7 @@ exports.new = function(req, res, next) {
     return res.status(409).json({ success: false, errors: ['\'company\' param is required'] });
   }
 
-  validateCustomer(req.body.company, (errValidation, company) => {
+  validateCompany(req.body.company, (errValidation, company) => {
     if (errValidation) {
       console.log(err);
       return res.json({ success: false, errors: [errValidation.message] });
@@ -84,8 +84,39 @@ exports.new = function(req, res, next) {
   });
 };
 
+// PUT /api/companies
+exports.updateCompany = function(req, res, next) {
+  if (!req.body.company || typeof req.body.company !== 'object') {
+    return res.status(409).json({ success: false, errors: ['\'company\' param is required'] });
+  }
 
-function validateCustomer(company, callback) {
+  const company = req.body.company;
+
+  updateCompany(company, (err, data) => {
+    if (err) {
+      if (err) console.log(err);
+      return res.json({ success: false, errors: [err.message] });
+    }
+
+    return res.json({ success: true });
+  });
+};
+
+
+function updateCompany(company, callback) {
+
+  validateCompany(company, (errValdation, c) => {
+    if (errValdation) return callback (errValdation);
+
+    Company.findOneAndUpdate({ _id: c.id }, c, (err, data) => {
+      if (err) return callback(err);
+
+      return callback(null, data);
+    });
+  });
+}
+
+function validateCompany(company, callback) {
 
   if (typeof company.name === 'string') {
     company.name = company.name.trim();

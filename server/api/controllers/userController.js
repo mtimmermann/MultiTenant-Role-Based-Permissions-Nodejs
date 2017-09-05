@@ -134,7 +134,7 @@ exports.updateUser = function(req, res, next) {
   const user = req.body.user;
   delete user.password;
 
-  updateUser(user.id, user, (err, data) => {
+  updateUser(user, (err, data) => {
     if (err) {
       if (err) console.log(err);
       return res.json({ success: false, errors: [err.message] });
@@ -163,7 +163,7 @@ exports.updateProfile = function(req, res, next) {
     delete user.role;
     delete user.password;
 
-    updateUser(user.id, user, (err, data) => {
+    updateUser(user, (err, data) => {
       if (err) {
         if (err) console.log(err);
         return res.json({ success: false, errors: [err.message] });
@@ -198,7 +198,7 @@ function savePassword(userId, password, callback) {
   });
 }
 
-function updateUser(userId, user, callback) {
+function updateUser(user, callback) {
 
   validateUser(user, (errValdation, u) => {
     if (errValdation) return callback (errValdation);

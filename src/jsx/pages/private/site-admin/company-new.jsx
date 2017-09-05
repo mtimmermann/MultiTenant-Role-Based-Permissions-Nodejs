@@ -19,7 +19,7 @@ class CompanyNew extends Component {
   submit(evt) {
     evt.preventDefault();
 
-    CompanyService.newCustomer(this.state.company, (err, data) => {
+    CompanyService.newCompany(this.state.company, (err, data) => {
       if (err || (data && !data.success)) {
         this.setState({ errors: data && data.errors ? data.errors : [err.message] });
       } else if (data && data.success) {

@@ -48,4 +48,7 @@ router.get('/companies/:id', authCheck([Roles.siteAdmin]), companyController.fin
 // POST /api/companies
 router.post('/companies', authCheck([Roles.siteAdmin]), companyController.new);
 
+// PUT /api/companies
+router.put('/companies', authCheck([Roles.siteAdmin]), companyController.updateCompany);
+
 module.exports = router;
