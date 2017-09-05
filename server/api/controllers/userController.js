@@ -61,26 +61,6 @@ exports.find = function(req, res, next) {
 };
 
 
-// DELETE /api/users/:id
-exports.destroy = function(req, res, next) {
-
-  User.findByIdAndRemove(req.params.id, (err, user) => {
-    if (err || !user) {
-      if (err) console.log(err);
-      return res.status(404).json({
-        success: false,
-        errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
-      });
-    }
-
-    return res.json({
-      success: true,
-      data: user
-    });
-  });
-};
-
-
 // PUT /api/users/profile/password
 // User changing thier profile password - auth priveledges
 exports.updateProfilePassword = function(req, res, next) {
@@ -106,6 +86,7 @@ exports.updateProfilePassword = function(req, res, next) {
     });
   });
 };
+
 
 // PUT /api/users/password
 // SiteAdmin changing user password - SiteAdmin privelege
@@ -170,6 +151,26 @@ exports.updateProfile = function(req, res, next) {
       }
 
       return res.json({ success: true });
+    });
+  });
+};
+
+
+// DELETE /api/users/:id
+exports.destroy = function(req, res, next) {
+
+  User.findByIdAndRemove(req.params.id, (err, user) => {
+    if (err || !user) {
+      if (err) console.log(err);
+      return res.status(404).json({
+        success: false,
+        errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: user
     });
   });
 };

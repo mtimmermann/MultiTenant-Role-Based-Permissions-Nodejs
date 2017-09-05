@@ -23,9 +23,6 @@ router.get('/users', authCheck([Roles.admin,Roles.siteAdmin]), userController.li
 // GET /api/users/:id
 router.get('/users/:id', authCheck([Roles.siteAdmin]), userController.find);
 
-// DELETE /api/users/:id
-router.delete('/users/:id', authCheck([Roles.siteAdmin]), userController.destroy);
-
 // PUT /api/users
 router.put('/users', authCheck([Roles.siteAdmin]), userController.updateUser);
 
@@ -37,6 +34,9 @@ router.put('/users/profile', authCheck(), userController.updateProfile);
 
 // PUT /api/users/profile/password
 router.put('/users/profile/password', authCheck(), userController.updateProfilePassword);
+
+// DELETE /api/users/:id
+router.delete('/users/:id', authCheck([Roles.siteAdmin]), userController.destroy);
 
 
 // GET /api/companies
@@ -50,5 +50,9 @@ router.post('/companies', authCheck([Roles.siteAdmin]), companyController.new);
 
 // PUT /api/companies
 router.put('/companies', authCheck([Roles.siteAdmin]), companyController.updateCompany);
+
+// DELETE /api/companies/:id
+router.delete('/companies/:id', authCheck([Roles.siteAdmin]), companyController.destroy);
+
 
 module.exports = router;

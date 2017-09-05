@@ -103,6 +103,26 @@ exports.updateCompany = function(req, res, next) {
 };
 
 
+// DELETE /api/companies/:id
+exports.destroy = function(req, res, next) {
+
+  Company.findByIdAndRemove(req.params.id, (err, company) => {
+    if (err || !company) {
+      if (err) console.log(err);
+      return res.status(404).json({
+        success: false,
+        errors: [ err ? err.message : `company id '${req.params.id} not found'` ]
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: company
+    });
+  });
+};
+
+
 function updateCompany(company, callback) {
 
   validateCompany(company, (errValdation, c) => {

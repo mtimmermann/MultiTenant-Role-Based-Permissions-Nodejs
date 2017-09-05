@@ -56,6 +56,20 @@ const CompanyService = {
   updateCompany: (company, callback) => {
     if (!$.isFunction(callback)) throw new Error('callback function is required');
     Request.put('/api/companies', JSON.stringify({ company /* :company */ }), callback);
+  },
+
+  /**
+   * Delete a company
+   *
+   * @param {string}   id company id
+   * @param {function} callback (err, data)
+                       The function that is called after a service call
+                       error {object}: null if no error
+                       data {object}: The data set of a succesful call
+   */
+  deleteCompany: (id, callback) => {
+    if (!$.isFunction(callback)) throw new Error('callback function is required');
+    Request.delete(`/api/companies/${id}`, callback);
   }
 };
 
