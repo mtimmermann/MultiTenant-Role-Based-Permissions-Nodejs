@@ -20,7 +20,7 @@ class ProfilePassword extends Component {
     evt.preventDefault();
 
     UserService.profileUserPassword(this.state.user, (err, data) => {
-      if (err) {
+      if (err || (data && !data.success)) {
         this.setState({ errors: data && data.errors ? data.errors : [err] });
       } else if (data && data.success) {
         this.props.history.push('/');
