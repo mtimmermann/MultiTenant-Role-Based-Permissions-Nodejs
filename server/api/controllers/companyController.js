@@ -37,6 +37,26 @@ exports.list = function(req, res, next) {
 };
 
 
+// GET /api/companies/:id
+exports.find = function(req, res, next) {
+
+  Company.findById(req.params.id, (err, company) => {
+    if (err || !company) {
+      if (err) console.log(err);
+      return res.status(404).json({
+        success: false,
+        errors: [ err ? err.message : `company id '${req.params.id} not found'` ]
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: company
+    });
+  });
+};
+
+
 // POST /api/companies
 // Add new company
 exports.new = function(req, res, next) {

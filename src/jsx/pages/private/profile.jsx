@@ -50,7 +50,7 @@ class Profile extends Component {
 
     UserService.updateProfile(this.state.user, (err, data) => {
       if (err) {
-        this.setState({ errors: data && data.errors ? data.errors : [err] });
+        this.setState({ errors: data && data.errors ? data.errors : [err.message] });
       } else if (data && data.success) {
         Auth.updateUser(this.state.user);
         this.props.history.goBack();

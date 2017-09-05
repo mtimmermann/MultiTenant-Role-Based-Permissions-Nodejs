@@ -23,7 +23,7 @@ class UserDelete extends Component {
       if (data && data.success) {
         this.setState({ user: data.data });
       } else if (err) {
-        this.setState({ errors: [err] });
+        this.setState({ errors: [err.message] });
       }
     });
   }
@@ -31,7 +31,7 @@ class UserDelete extends Component {
   delete() {
     UserService.deleteUser(this.state.id, (err, data) => {
       if (err || (data && !data.success)) {
-        this.setState({ errors: data && data.errors ? data.errors : [err] });
+        this.setState({ errors: data && data.errors ? data.errors : [err.message] });
       } else if (data && data.success) {
         this.props.history.goBack();
       }

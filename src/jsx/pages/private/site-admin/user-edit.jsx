@@ -48,7 +48,7 @@ class UserEdit extends Component {
           this.validate(key, this.state.user[key]);
         });
       } else if (err) {
-        this.setState({ errors: [err] });
+        this.setState({ errors: [err.message] });
       }
     });
   }
@@ -64,7 +64,7 @@ class UserEdit extends Component {
 
     UserService.updateUser(this.state.user, (err, data) => {
       if (err || (data && !data.success)) {
-        this.setState({ errors: data && data.errors ? data.errors : [err] });
+        this.setState({ errors: data && data.errors ? data.errors : [err.message] });
       } else if (data && data.success) {
         this.props.history.goBack();
       }

@@ -32,7 +32,7 @@ class Users extends Component {
 
     UserService.getUsers(query, (err, data) => {
       if (err) {
-        this.setState({ errors: [err] });
+        this.setState({ errors: [err.message] });
       } else {
         this.setState({
           errors: [],

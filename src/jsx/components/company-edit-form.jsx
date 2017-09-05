@@ -25,6 +25,7 @@ class CompanyEditForm extends Component {
       }
     };
 
+    this.componentDidUpdate = this.componentDidUpdate.bind(this);
     this.changeInput = this.changeInput.bind(this);
     this.cancel = this.cancel.bind(this);
   }
@@ -34,6 +35,11 @@ class CompanyEditForm extends Component {
   }
   componentDidUpdate(prevProps) {
     if (prevProps.isFetching !== this.props.isFetching) {
+      // Validate form after inputs are loaded
+      Object.keys(this.props.company).forEach((key) => {
+        this.validate(key, this.props.company[key]);
+      });
+
       Utils.focusFirstInput();
     }
   }

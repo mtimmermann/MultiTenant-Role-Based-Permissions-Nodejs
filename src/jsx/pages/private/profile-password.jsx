@@ -21,7 +21,7 @@ class ProfilePassword extends Component {
 
     UserService.profileUserPassword(this.state.user, (err, data) => {
       if (err || (data && !data.success)) {
-        this.setState({ errors: data && data.errors ? data.errors : [err] });
+        this.setState({ errors: data && data.errors ? data.errors : [err.message] });
       } else if (data && data.success) {
         this.props.history.push('/');
       }

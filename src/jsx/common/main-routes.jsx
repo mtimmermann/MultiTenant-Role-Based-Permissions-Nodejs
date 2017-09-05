@@ -17,6 +17,7 @@ import Admin1 from '../pages/private/admin1';
 
 import Companies from '../pages/private/site-admin/companies';
 import CompanyNew from '../pages/private/site-admin/company-new';
+import CompanyEdit from '../pages/private/site-admin/company-edit';
 
 import Users from '../pages/private/site-admin/users';
 import UserEdit from '../pages/private/site-admin/user-edit';
@@ -47,6 +48,7 @@ class MainRoutes extends React.Component {
             {/* <Route path="/admin/users" userRoles="Admin,SiteAdmin" component={Users} /> */}
             {/* eslint-disable arrow-body-style, arrow-parens */}
             <Route path="/siteadmin/companies/new" userRoles="SiteAdmin" render={(props) => (<CompanyNew {...props} role={Auth.getRole()} />)} />
+            <Route path="/siteadmin/companies/edit/:id" userRoles="SiteAdmin" render={(props) => (<CompanyEdit {...props} role={Auth.getRole()} />)} />
             <Route path="/siteadmin/companies" userRoles="SiteAdmin" render={(props) => (<Companies {...props} role={Auth.getRole()} />)} />
             <Route path="/admin/users" userRoles="Admin,SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
             {/* eslint-enable arrow-body-style */}

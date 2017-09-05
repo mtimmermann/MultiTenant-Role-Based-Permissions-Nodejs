@@ -23,7 +23,7 @@ class UserPassword extends Component {
       if (data && data.success) {
         this.setState({ user: data.data, isFetching: false });
       } else if (err) {
-        this.setState({ errors: [err] });
+        this.setState({ errors: [err.message] });
       }
     });
   }
@@ -33,7 +33,7 @@ class UserPassword extends Component {
 
     UserService.adminUserPassword(this.state.user, (err, data) => {
       if (err || (data && !data.success)) {
-        this.setState({ errors: data && data.errors ? data.errors : [err] });
+        this.setState({ errors: data && data.errors ? data.errors : [err.message] });
       } else if (data && data.success) {
         this.props.history.push('/admin/users');
       }

@@ -32,7 +32,7 @@ class Companies extends Component {
 
     CompanyService.getCompanies(query, (err, data) => {
       if (err) {
-        this.setState({ errors: [err] });
+        this.setState({ errors: [err.message] });
       } else {
         this.setState({
           errors: [],

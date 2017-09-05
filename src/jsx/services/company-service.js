@@ -17,6 +17,20 @@ const CompanyService = {
   },
 
   /**
+   * Get Company by id
+   *
+   * @param {string}   id company id
+   * @param {function} callback (err, data)
+                       The function that is called after a service call
+                       error {object}: null if no error
+                       data {object}: The data set of a succesful call
+   */
+  getCompany: (id, callback) => {
+    if (!$.isFunction(callback)) throw new Error('callback function is required');
+    Request.get(`/api/companies/${id}`, callback);
+  },
+
+  /**
    * Add new company
    *
    * @param {object}   company company object to add
