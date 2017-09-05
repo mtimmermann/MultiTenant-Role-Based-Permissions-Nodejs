@@ -15,6 +15,8 @@ import ProfilePassword from '../pages/private/profile-password';
 import Private1 from '../pages/private/private1';
 import Admin1 from '../pages/private/admin1';
 
+import Companies from '../pages/private/site-admin/companies';
+
 import Users from '../pages/private/site-admin/users';
 import UserEdit from '../pages/private/site-admin/user-edit';
 import UserDelete from '../pages/private/site-admin/user-delete';
@@ -43,6 +45,7 @@ class MainRoutes extends React.Component {
             <Route path="/admin/users/password/:id" userRoles="SiteAdmin" component={UserPassword} />
             {/* <Route path="/admin/users" userRoles="Admin,SiteAdmin" component={Users} /> */}
             {/* eslint-disable arrow-body-style, arrow-parens */}
+            <Route path="/siteadmin/companies" userRoles="SiteAdmin" render={(props) => (<Companies {...props} role={Auth.getRole()} />)} />
             <Route path="/admin/users" userRoles="Admin,SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
             {/* eslint-enable arrow-body-style */}
           </Switch>

@@ -7,7 +7,7 @@ const timestamps = require('mongoose-timestamp');
 
 const Roles = require('../../src/shared/roles');
 
-// define the User model schema
+// Define the User model schema
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -72,21 +72,6 @@ UserSchema.pre('save', function saveHook(next) {
 
     return next();
   });
-
-/*
-  return bcrypt.genSalt((saltError, salt) => {
-    if (saltError) { return next(saltError); }
-
-    return bcrypt.hash(user.password, salt, (hashError, hash) => {
-      if (hashError) { return next(hashError); }
-
-      // Replace a password string with hash value
-      user.password = hash;
-
-      return next();
-    });
-  });
-*/
 });
 
 module.exports = mongoose.model('User', UserSchema);

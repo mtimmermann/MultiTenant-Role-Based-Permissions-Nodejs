@@ -33,11 +33,20 @@ class NavBar extends React.Component {
             <ul className="nav navbar-nav">
               <li><NavLink to="/public1" activeClassName="active">Public</NavLink></li>
               {isAuthenticated && <li><NavLink to="/private1" activeClassName="active">Private</NavLink></li> }
-              {isAuthenticated && (user.role === Roles.siteAdmin || user.role === Roles.admin) &&
+              {isAuthenticated && user.role === Roles.admin &&
                 <li><NavLink to="/admin1" activeClassName="active">Admin</NavLink></li>
               }
-              {isAuthenticated && (user.role === Roles.siteAdmin || user.role === Roles.admin) &&
-                <li><NavLink to="/admin/users" activeClassName="active">Users Admin</NavLink></li>
+              {isAuthenticated && user.role === Roles.siteAdmin &&
+                <li className="dropdown">
+                  <a className="dropdown-toggle" href="#" data-toggle="dropdown">
+                    Admin
+                    <b className="caret" />
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li><NavLink to="/siteadmin/companies" activeClassName="active">Company Admin</NavLink></li>
+                    <li><NavLink to="/siteadmin/users" activeClassName="active">Users Admin</NavLink></li>
+                  </ul>
+                </li>
               }
               <li className="dropdown">
                 <a className="dropdown-toggle" href="#" data-toggle="dropdown">

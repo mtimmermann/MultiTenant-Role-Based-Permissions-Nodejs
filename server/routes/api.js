@@ -5,6 +5,7 @@ const Roles = require('../../src/shared/roles');
 
 const messageController = require('../api/controllers/messageController');
 const userController = require('../api/controllers/userController');
+const companyController = require('../api/controllers/companyController');
 
 // GET /api/messages/public1
 router.get('/messages/public1', messageController.getPublicMessage1);
@@ -36,5 +37,9 @@ router.put('/users/profile', authCheck(), userController.updateProfile);
 
 // PUT /api/users/profile/password
 router.put('/users/profile/password', authCheck(), userController.updateProfilePassword);
+
+
+// GET /api/companies
+router.get('/companies', authCheck([Roles.siteAdmin]), companyController.list);
 
 module.exports = router;
