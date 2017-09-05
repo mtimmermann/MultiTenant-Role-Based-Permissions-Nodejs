@@ -1,4 +1,5 @@
 const Company = require('mongoose').model('Company');
+const subdomains = require('../../main/common/sub-domains');
 
 // GET /api/companies
 // List companies, paginations options
@@ -55,6 +56,8 @@ exports.new = function(req, res, next) {
         console.log(err);
         return res.json({ success: false, errors: [err.message] });
       }
+
+      subdomains.add(req.app, company.subdomain);
 
       return res.json({ success: true });
     });

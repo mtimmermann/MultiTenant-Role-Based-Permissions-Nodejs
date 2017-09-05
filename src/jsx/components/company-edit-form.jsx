@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Utils from '../common/utils';
 import FormValidationErrors from './form-validation-errors';
 import FormSubmitErrors from './form-submit-errors';
 
@@ -26,6 +27,15 @@ class CompanyEditForm extends Component {
 
     this.changeInput = this.changeInput.bind(this);
     this.cancel = this.cancel.bind(this);
+  }
+
+  componentDidMount() {
+    Utils.focusFirstInput();
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.isFetching !== this.props.isFetching) {
+      Utils.focusFirstInput();
+    }
   }
 
   changeInput(evt) {
@@ -77,7 +87,7 @@ class CompanyEditForm extends Component {
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="name">Name</label>
                 <div className="col-sm-9">
-                  <input type="text" className="form-control" id="name" name="name" value={this.props.company.name} placeholder="Name" onChange={this.changeInput} />
+                  <input type="text" className="form-control" id="name" name="name" value={this.props.company.name} placeholder="Company Name" onChange={this.changeInput} />
                 </div>
               </div>
               <div className="form-group">

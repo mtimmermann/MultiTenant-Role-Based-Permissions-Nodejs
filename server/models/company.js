@@ -6,11 +6,13 @@ const timestamps = require('mongoose-timestamp');
 const CompanySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    index: { unique: true }
   },
   subdomain: {
     type: String,
-    required: true
+    required: true,
+    index: { unique: true }
   }
 });
 
