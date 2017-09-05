@@ -137,7 +137,7 @@ class SignUp extends Component {
       <div>
         <div className="row">
           <div className="col-sm-4 col-md-4 col-lg-4 form-header">
-            <h4>Sign Up</h4>
+            <h4>Sign Up {this.props.company.name && `- ${this.props.company.name}`}</h4>
           </div>
         </div>
         <div className="row">
@@ -186,6 +186,10 @@ class SignUp extends Component {
 SignUp.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
+  }).isRequired,
+  company: PropTypes.shape({
+    name: PropTypes.string,
+    subdomain: PropTypes.string
   }).isRequired
 };
 

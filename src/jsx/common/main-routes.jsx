@@ -33,7 +33,7 @@ class MainRoutes extends React.Component {
         <Route exact path="/" render={(props) => (<Home {...props} company={this.props.company} />)} />
         <Route exact path="/public1" component={Public1} />
         <Route exact path="/signin" render={(props) => (<SignIn {...props} company={this.props.company} />)} />
-        <Route exact path="/signup" component={SignUp} />
+        <Route exact path="/signup" render={(props) => (<SignUp {...props} company={this.props.company} />)} />
 
         <PrivateRoutes isAuthenticated={this.props.isAuthenticated} role={Auth.getRole()}>
           <Switch>
