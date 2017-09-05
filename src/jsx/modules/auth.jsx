@@ -1,3 +1,4 @@
+import CompanyService from '../services/company-service';
 import { session } from '../config';
 
 function isExpired() {
@@ -55,6 +56,7 @@ const Auth = {
     localStorage.removeItem('token');
     localStorage.removeItem('utoken');
     localStorage.removeItem('exp');
+    localStorage.removeItem('ctoken');
   },
 
   /**
@@ -81,6 +83,32 @@ const Auth = {
   getUser: () => {
     const utoken = localStorage.getItem('utoken');
     return utoken !== null ? JSON.parse(atob(utoken)) : null;
+  },
+
+  /**
+   * Get Company ojbect { name & subdomain }
+   * @returns {object}
+   */
+  getCompany: () => { // eslint-disable-line consistent-return
+    const ctoken = localStorage.getItem('ctoken');
+    if (ctoken === null) {
+      const locParts = window.location.hostname.split('.');
+      if (locParts.length === 3) {
+        const subdomain = locParts[0].toLowerCase();
+        CompanyService.getCompanyBySubdomain(subdomain, (err, result) => {
+          if (err) {
+            console.log(err);
+            return null;
+          }
+
+          const company = { name: result.data.name, subdomain: result.data.subdomain };
+          localStorage.setItem('ctoken', btoa(JSON.stringify(company)));
+          return company;
+        });
+      } else { return null; }
+    } else {
+      return JSON.parse(atob(ctoken));
+    }
   }
 
 };

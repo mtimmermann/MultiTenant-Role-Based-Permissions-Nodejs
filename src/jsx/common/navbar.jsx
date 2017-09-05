@@ -25,7 +25,13 @@ class NavBar extends React.Component {
               <span className="icon-bar" />
               <span className="icon-bar" />
             </button>
-            <NavLink to="/" className="navbar-brand">Passport React Node.js</NavLink>
+            <NavLink to="/" className="navbar-brand">
+              {this.props.company && this.props.company.name ? (
+                this.props.company.name
+              ) : (
+                <div>Passport React Node.js</div>
+              )}
+            </NavLink>
           </div>
 
           {/* Collect the nav links, forms, and other content for toggling */}
@@ -89,7 +95,14 @@ class NavBar extends React.Component {
 }
 NavBar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  user: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
+  user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  company: PropTypes.oneOfType([
+    null,
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      subdomain: PropTypes.string.isRequired
+    }).isRequired
+  ]).isRequired
 };
 
 export default NavBar;

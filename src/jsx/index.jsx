@@ -14,9 +14,12 @@ class App extends React.Component {
     const isAuthenticated = Auth.isAuthenticated();
     return (
       <div>
-        <NavBar isAuthenticated={isAuthenticated} user={Auth.getUser() || {}} />
+        <NavBar
+          isAuthenticated={isAuthenticated}
+          user={Auth.getUser() || {}}
+          company={Auth.getCompany()} />
         <div className="container-fluid">
-          <MainRoutes isAuthenticated={isAuthenticated} />
+          <MainRoutes isAuthenticated={isAuthenticated} company={Auth.getCompany()} />
         </div>
       </div>
     );

@@ -57,6 +57,27 @@ exports.find = function(req, res, next) {
 };
 
 
+// GET /api/companies/subdomain/:subdomain
+// Find Company by subdomain
+exports.findBySubdomain = function(req, res, next) {
+
+  Company.find({ subdomain:  req.params.subdomain }, (err, result) => {
+    if (err || (!result && !result.length === 1)) {
+      if (err) console.log(err);
+      return res.status(404).json({
+        success: false,
+        errors: [ err ? err.message : `company subdomain '${req.params.subdomain} not found'` ]
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: result[0]
+    });
+  });
+};
+
+
 // POST /api/companies
 // Add new company
 exports.new = function(req, res, next) {

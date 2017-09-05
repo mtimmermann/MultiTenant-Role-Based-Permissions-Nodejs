@@ -30,40 +30,45 @@ class MainRoutes extends React.Component {
   render() {
     return (
       <Switch>
-        <Route exact path="/" component={Home} />
+        {/* eslint-disable arrow-body-style, arrow-parens */}
+        <Route exact path="/" render={(props) => (<Home {...props} company={Auth.getCompany()} />)} />
         <Route exact path="/public1" component={Public1} />
-        <Route exact path="/signin" component={SignIn} />
+        <Route exact path="/signin" render={(props) => (<SignIn {...props} company={Auth.getCompany()} />)} />
         <Route exact path="/signup" component={SignUp} />
 
         <PrivateRoutes isAuthenticated={this.props.isAuthenticated} role={Auth.getRole()}>
           <Switch>
-            {/* eslint-disable arrow-body-style, arrow-parens */}
-            <Route path="/profile/password" render={(props) => (<ProfilePassword {...props} user={Auth.getUser()} />)} />
-            <Route path="/profile" render={(props) => (<Profile {...props} user={Auth.getUser()} />)} />
-            {/* eslint-enable arrow-body-style */}
-            <Route path="/private1" component={Private1} />
-            <Route path="/admin1" userRoles="Admin,SiteAdmin" component={Admin1} />
-            <Route path="/admin/users/edit/:id" userRoles="SiteAdmin" component={UserEdit} />
-            <Route path="/admin/users/delete/:id" userRoles="SiteAdmin" component={UserDelete} />
-            <Route path="/admin/users/password/:id" userRoles="SiteAdmin" component={UserPassword} />
+            <Route exact path="/profile/password" render={(props) => (<ProfilePassword {...props} user={Auth.getUser()} />)} />
+            <Route exact path="/profile" render={(props) => (<Profile {...props} user={Auth.getUser()} />)} />
+            <Route exact path="/private1" component={Private1} />
+            <Route exact path="/admin1" userRoles="Admin,SiteAdmin" component={Admin1} />
+            <Route exact path="/admin/users/edit/:id" userRoles="SiteAdmin" component={UserEdit} />
+            <Route exact path="/admin/users/delete/:id" userRoles="SiteAdmin" component={UserDelete} />
+            <Route exact path="/admin/users/password/:id" userRoles="SiteAdmin" component={UserPassword} />
             {/* <Route path="/admin/users" userRoles="Admin,SiteAdmin" component={Users} /> */}
-            {/* eslint-disable arrow-body-style, arrow-parens */}
-            <Route path="/siteadmin/companies/new" userRoles="SiteAdmin" render={(props) => (<CompanyNew {...props} role={Auth.getRole()} />)} />
-            <Route path="/siteadmin/companies/edit/:id" userRoles="SiteAdmin" render={(props) => (<CompanyEdit {...props} role={Auth.getRole()} />)} />
-            <Route path="/siteadmin/companies/delete/:id" userRoles="SiteAdmin" render={(props) => (<CompanyDelete {...props} role={Auth.getRole()} />)} />
-            <Route path="/siteadmin/companies" userRoles="SiteAdmin" render={(props) => (<Companies {...props} role={Auth.getRole()} />)} />
-            <Route path="/admin/users" userRoles="Admin,SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
-            {/* eslint-enable arrow-body-style */}
+            <Route exact path="/siteadmin/companies/new" userRoles="SiteAdmin" render={(props) => (<CompanyNew {...props} role={Auth.getRole()} />)} />
+            <Route exact path="/siteadmin/companies/edit/:id" userRoles="SiteAdmin" render={(props) => (<CompanyEdit {...props} role={Auth.getRole()} />)} />
+            <Route exact path="/siteadmin/companies/delete/:id" userRoles="SiteAdmin" render={(props) => (<CompanyDelete {...props} role={Auth.getRole()} />)} />
+            <Route exact path="/siteadmin/companies" userRoles="SiteAdmin" render={(props) => (<Companies {...props} role={Auth.getRole()} />)} />
+            <Route exact path="/admin/users" userRoles="Admin,SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
           </Switch>
         </PrivateRoutes>
 
         {/* <Route path="*" component={NotFound} /> */}
+        {/* eslint-enable arrow-body-style, arrow-parens */}
       </Switch>
     );
   }
 }
 MainRoutes.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  company: PropTypes.oneOfType([
+    null,
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      subdomain: PropTypes.string.isRequired
+    }).isRequired
+  ]).isRequired
 };
 
 export default MainRoutes;

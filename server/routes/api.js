@@ -45,6 +45,9 @@ router.get('/companies', authCheck([Roles.siteAdmin]), companyController.list);
 // GET /api/companies/:id
 router.get('/companies/:id', authCheck([Roles.siteAdmin]), companyController.find);
 
+// GET /api/companies/subdomain/:subdomain
+router.get('/companies/subdomain/:subdomain', companyController.findBySubdomain);
+
 // POST /api/companies
 router.post('/companies', authCheck([Roles.siteAdmin]), companyController.new);
 

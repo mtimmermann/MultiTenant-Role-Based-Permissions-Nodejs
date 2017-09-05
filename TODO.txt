@@ -1,5 +1,8 @@
 
 TODO:
+- Company subdomain & name for non-auth pages
+  - location.hostname.split('.')
+
 - winston logging db & file
 - ! SCSS Site Branding
 

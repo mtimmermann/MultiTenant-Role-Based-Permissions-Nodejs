@@ -31,6 +31,20 @@ const CompanyService = {
   },
 
   /**
+   * Get Company by id
+   *
+   * @param {string}   subdomain company subdomain
+   * @param {function} callback (err, data)
+                       The function that is called after a service call
+                       error {object}: null if no error
+                       data {object}: The data set of a succesful call
+   */
+  getCompanyBySubdomain: (subdomain, callback) => {
+    if (!$.isFunction(callback)) throw new Error('callback function is required');
+    Request.get(`/api/companies/subdomain/${subdomain}`, callback);
+  },
+
+  /**
    * Add new company
    *
    * @param {object}   company company object to add
