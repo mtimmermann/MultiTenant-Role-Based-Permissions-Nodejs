@@ -26,14 +26,13 @@ import UserDelete from '../pages/private/site-admin/user-delete';
 import UserPassword from '../pages/private/site-admin/user-password';
 
 class MainRoutes extends React.Component {
-
   render() {
     return (
       <Switch>
         {/* eslint-disable arrow-body-style, arrow-parens */}
-        <Route exact path="/" render={(props) => (<Home {...props} company={Auth.getCompany()} />)} />
+        <Route exact path="/" render={(props) => (<Home {...props} company={this.props.company} />)} />
         <Route exact path="/public1" component={Public1} />
-        <Route exact path="/signin" render={(props) => (<SignIn {...props} company={Auth.getCompany()} />)} />
+        <Route exact path="/signin" render={(props) => (<SignIn {...props} company={this.props.company} />)} />
         <Route exact path="/signup" component={SignUp} />
 
         <PrivateRoutes isAuthenticated={this.props.isAuthenticated} role={Auth.getRole()}>
@@ -62,13 +61,10 @@ class MainRoutes extends React.Component {
 }
 MainRoutes.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  company: PropTypes.oneOfType([
-    null,
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      subdomain: PropTypes.string.isRequired
-    }).isRequired
-  ]).isRequired
+  company: PropTypes.shape({
+    name: PropTypes.string,
+    subdomain: PropTypes.string
+  }).isRequired
 };
 
 export default MainRoutes;

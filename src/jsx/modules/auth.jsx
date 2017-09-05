@@ -87,27 +87,27 @@ const Auth = {
 
   /**
    * Get Company ojbect { name & subdomain }
-   * @returns {object}
+   * @param {function} callback (err, data)
+                       The function that is called after a service call
+                       error {object}: null if no error
+                       data {object}: The data set of a succesful call
    */
-  getCompany: () => { // eslint-disable-line consistent-return
+  getCompany: (callback) => { // eslint-disable-line consistent-return
     const ctoken = localStorage.getItem('ctoken');
     if (ctoken === null) {
       const locParts = window.location.hostname.split('.');
       if (locParts.length === 3) {
         const subdomain = locParts[0].toLowerCase();
         CompanyService.getCompanyBySubdomain(subdomain, (err, result) => {
-          if (err) {
-            console.log(err);
-            return null;
-          }
+          if (err) { return callback(err); }
 
           const company = { name: result.data.name, subdomain: result.data.subdomain };
           localStorage.setItem('ctoken', btoa(JSON.stringify(company)));
-          return company;
+          return callback(null, company);
         });
-      } else { return null; }
+      } else { return callback(null, null); }
     } else {
-      return JSON.parse(atob(ctoken));
+      return callback(null, JSON.parse(atob(ctoken)));
     }
   }
 

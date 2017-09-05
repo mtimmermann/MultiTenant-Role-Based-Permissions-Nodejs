@@ -132,7 +132,7 @@ class SignIn extends Component {
       <div>
         <div className="row">
           <div className="col-sm-4 col-md-4 col-lg-4 form-header">
-            <h4>Sign In { this.props.company && this.props.company.name && `- ${this.props.company.name}`}</h4>
+            <h4>Sign In { this.props.company.name && `- ${this.props.company.name}`}</h4>
             <div className="pull-right">
               Please enter email and password. Or <NavLink to="/signup">Sign up for a new account</NavLink>
             </div>
@@ -173,13 +173,10 @@ SignIn.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
-  company: PropTypes.oneOfType([
-    null,
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      subdomain: PropTypes.string.isRequired
-    }).isRequired
-  ]).isRequired
+  company: PropTypes.shape({
+    name: PropTypes.string,
+    subdomain: PropTypes.string
+  }).isRequired
 };
 
 export default SignIn;
