@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import ReactTable from 'react-table';
-import Roles from '../../../../shared/roles';
+
 import FormSubmitErrors from '../../../components/form-submit-errors';
 
 import CompanyService from '../../../services/company-service';
@@ -47,7 +46,6 @@ class Companies extends Component {
 
   render() {
     const { data, pages, loading } = this.state;
-    const role = this.props.role;
     const columns = [
       {
         Header: 'Name',
@@ -65,11 +63,11 @@ class Companies extends Component {
         /* eslint-disable arrow-body-style */
         Cell: row => (
           <div>
-            <NavLink className="btn btn-default btn-xs" to={`/admin/users/edit/${row.value}`}>
+            <NavLink className="btn btn-default btn-xs" to={`/siteadmin/companies/edit/${row.value}`}>
               <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
               Edit
             </NavLink>
-            <NavLink className="btn btn-default btn-xs m-l-xs" to={`/admin/users/delete/${row.value}`}>
+            <NavLink className="btn btn-default btn-xs m-l-xs" to={`/siteadmin/companies/delete/${row.value}`}>
               <span className="glyphicon glyphicon-trash" aria-hidden="true" />
               Delete
             </NavLink>
@@ -81,6 +79,12 @@ class Companies extends Component {
 
     return (
       <div>
+        <div>
+          <NavLink className="btn btn-default btn-xs m-b-sm" to={'/siteadmin/companies/new'}>
+            <span className="glyphicon glyphicon-plus" aria-hidden="true" />
+            Add new Company
+          </NavLink>
+        </div>
         <FormSubmitErrors errors={this.state.errors} />
         <ReactTable
           columns={columns}
@@ -97,8 +101,5 @@ class Companies extends Component {
     );
   }
 }
-Companies.propTypes = {
-  role: PropTypes.string.isRequired
-};
 
 export default Companies;

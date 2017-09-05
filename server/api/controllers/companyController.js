@@ -34,3 +34,51 @@ exports.list = function(req, res, next) {
     return res.json(result);
   });
 };
+
+
+// POST /api/companies
+// Add new company
+exports.new = function(req, res, next) {
+  if (!req.body.company || typeof req.body.company !== 'object') {
+    return res.status(409).json({ success: false, errors: ['\'company\' param is required'] });
+  }
+
+  validateCustomer(req.body.company, (errValidation, company) => {
+    if (errValidation) {
+      console.log(err);
+      return res.json({ success: false, errors: [errValidation.message] });
+    }
+
+    const newCompany = new Company(company);
+    newCompany.save((err) => {
+      if (err) {
+        console.log(err);
+        return res.json({ success: false, errors: [err.message] });
+      }
+
+      return res.json({ success: true });
+    });
+  });
+};
+
+
+function validateCustomer(company, callback) {
+
+  if (typeof company.name === 'string') {
+    company.name = company.name.trim();
+    if (company.name.length === 0)
+      return callback(new Error('company.name length is 0'));
+  } else {
+    return callback(new Error('company.name is required'));
+  }
+
+  if (typeof company.subdomain === 'string') {
+    company.subdomain = company.subdomain.trim();
+    if (company.subdomain.length === 0)
+      return callback(new Error('company.subdomain length is 0'));
+  } else {
+    return callback(new Error('company.subdomain is required'));
+  }
+
+  return callback(null, company);
+}

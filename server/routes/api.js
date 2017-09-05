@@ -42,4 +42,7 @@ router.put('/users/profile/password', authCheck(), userController.updateProfileP
 // GET /api/companies
 router.get('/companies', authCheck([Roles.siteAdmin]), companyController.list);
 
+// POST /api/companies
+router.post('/companies', authCheck([Roles.siteAdmin]), companyController.new);
+
 module.exports = router;
