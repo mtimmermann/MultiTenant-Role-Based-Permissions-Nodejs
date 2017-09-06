@@ -1,12 +1,13 @@
 
 TODO:
-- Site Branding
-
-- Company subdomain & name for non-auth pages
-  - location.hostname.split('.')
+- Error types, ModelValidation, etc.
+  - log error v.s. warn
 
 - winston logging db & file
+
 
 DONE:
 - Site Branding
   - SCSS
+- Company subdomain & name for non-auth pages
+  - location.hostname.split('.')

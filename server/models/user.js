@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
   },
   company: {
     type: Schema.ObjectId,
+    default: null,
     ref: 'Company'
   },
   password: String

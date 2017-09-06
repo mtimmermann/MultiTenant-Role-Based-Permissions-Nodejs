@@ -51,7 +51,8 @@ exports.list = function(req, res, next) {
   const companyId = req.query['companyId'];
   if (companyId) {
     if (companyId.toLowerCase() === 'unassociated') {
-      filterOptions.company = { $exists: false };
+      // filterOptions.company = { $exists: false };
+      filterOptions.company = null;
     } else {
       filterOptions.company = companyId;
     }
