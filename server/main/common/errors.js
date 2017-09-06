@@ -3,7 +3,9 @@
  */
 
 const ErrorTypes = {
-  ModelValidation: 'ModelValidation'
+  ModelValidation: 'ModelValidation',
+  NotAuthorized: 'NotAuthorized',
+  IncorrectCredentials: 'IncorrectCredentials'
 };
 
 class ModelValidationError extends Error {
@@ -14,7 +16,25 @@ class ModelValidationError extends Error {
   }
 }
 
+class NotAuthorizedError extends Error {
+  constructor(...args) {
+    super(...args);
+    Error.captureStackTrace(this, NotAuthorizedError);
+    this.name = ErrorTypes.NotAuthorized;
+  }
+}
+
+class IncorrectCredentialsError extends Error {
+  constructor(...args) {
+    super(...args);
+    Error.captureStackTrace(this, IncorrectCredentialsError);
+    this.name = ErrorTypes.IncorrectCredentials;
+  }
+}
+
 module.exports = {
   ErrorTypes: ErrorTypes,
-  ModelValidationError: ModelValidationError
+  ModelValidationError: ModelValidationError,
+  NotAuthorizedError: NotAuthorizedError,
+  IncorrectCredentialsError: IncorrectCredentialsError
 };

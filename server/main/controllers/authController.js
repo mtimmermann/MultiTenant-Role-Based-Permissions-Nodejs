@@ -1,5 +1,6 @@
 const passport = require('passport');
 const { validations } = require('../../config');
+const { ErrorTypes } = require('../../main/common/errors');
 
 // POST /auth/signup
 exports.postSignup = function(req, res, next) {
@@ -55,12 +56,12 @@ exports.postLogin = function(req, res, next) {
 
   return passport.authenticate('local-login', (err, token, userData) => {
     if (err) {
-      if (err.name === 'IncorrectCredentialsError') {
+      if (err.name === ErrorTypes.IncorrectCredentials) {
         return res.status(400).json({
           success: false,
           message: err.message
         });
-      } else if (err.name === 'NotAuthorized') {
+      } else if (err.name === ErrorTypes.NotAuthorized) {
         return res.status(401).json({
           success: false,
           message: 'Not Authorized'

@@ -191,7 +191,6 @@ exports.updateProfile = function(req, res, next) {
       if (err) {
         if (err.name && err.name === ErrorTypes.ModelValidation) {
           // TODO: winston.log('info', err.toString());
-          console.log(err.toString());
           return res.status(400).json({ success: false, errors: [err.message] });
         }
 

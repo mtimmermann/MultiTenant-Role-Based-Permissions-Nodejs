@@ -4,6 +4,10 @@ const PassportLocalStrategy = require('passport-local').Strategy;
 const CompanyData = require('../main/data/company-data');
 const Roles = require('../../src/shared/roles');
 const subdomains = require('../main/common/sub-domains');
+const {
+  ErrorTypes,
+  NotAuthorizedError,
+  IncorrectCredentialsError } = require('../main/common/errors');
 const config = require('../config');
 
 
@@ -26,9 +30,7 @@ module.exports = new PassportLocalStrategy({
     if (err) return done(err);
 
     if (!user) {
-      const error = new Error('Incorrect email or password');
-      error.name = 'IncorrectCredentialsError';
-      return done(error);
+      return done(new IncorrectCredentialsError('Incorrect email or password'));
     }
 
     // Ensure user is associated with company domain or is a SiteAdmin role
@@ -46,18 +48,14 @@ module.exports = new PassportLocalStrategy({
           });
         } else {
           // User not associated with this company/subdomain, not authorized
-          const error = new Error('Not Authorized');
-          error.name = 'NotAuthorized';
-          return done(error);
+          return done(new NotAuthorizedError('Not Authorized'));
         }
       });
     } else {
       if (user.company) {
         // User is associated with a company, do not allow a login at a
         //  non-subdomain level
-        const error = new Error('Not Authorized');
-        error.name = 'NotAuthorized';
-        return done(error);
+        return done(new NotAuthorizedError('Not Authorized'));
       } else {
         // No company subdomain user is dis-associated, allow auth at this level
         checkPassword(user, userData.password, (errPassword, token, data) => {
@@ -77,10 +75,7 @@ function checkPassword(user, clearPass, callback) {
     if (err) return callback(err);
 
     if (!isMatch) {
-      const error = new Error('Incorrect email or password');
-      error.name = 'IncorrectCredentialsError';
-
-      return callback(error);
+      return callback(new IncorrectCredentialsError('Incorrect email or password'));
     }
 
     const payload = {
