@@ -1,6 +1,7 @@
 const Company = require('mongoose').model('Company');
 const CompanyData = require('../../main/data/company-data');
 const subdomains = require('../../main/common/sub-domains');
+const { ErrorTypes, ModelValidationError } = require('../../main/common/errors');
 
 // GET /api/companies
 // List companies, paginations options
@@ -119,8 +120,15 @@ exports.updateCompany = function(req, res, next) {
 
   updateCompany(company, (err, data) => {
     if (err) {
-      if (err) console.log(err);
-      return res.json({ success: false, errors: [err.message] });
+      if (err.name && err.name === ErrorTypes.ModelValidation) {
+        // TODO: winston.log('info', err.toString());
+        console.log(err.toString());
+      } else {
+        // TODO: winston.log('error', err);
+        console.log(err);
+      }
+
+      return res.status(400).json({ success: false, errors: [err.message] });
     }
 
     return res.json({ success: true });

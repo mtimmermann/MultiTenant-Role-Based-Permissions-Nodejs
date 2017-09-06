@@ -156,12 +156,12 @@ exports.updateUser = function(req, res, next) {
       if (err.name && err.name === ErrorTypes.ModelValidation) {
         // TODO: winston.log('info', err.toString());
         console.log(err.toString());
-        return res.status(400).json({ success: false, errors: [err.message] });
+      } else {
+        // TODO: winston.log('error', err);
+        console.log(err);
       }
 
-      // TODO: winston.log('error', err);
-      console.log(err);
-      return res.json({ success: false, errors: [err.message] });
+      return res.status(400).json({ success: false, errors: [err.message] });
     }
 
     return res.json({ success: true });
@@ -191,12 +191,13 @@ exports.updateProfile = function(req, res, next) {
       if (err) {
         if (err.name && err.name === ErrorTypes.ModelValidation) {
           // TODO: winston.log('info', err.toString());
-          return res.status(400).json({ success: false, errors: [err.message] });
+          console.log(err.toString());
+        } else {
+          // TODO: winston.log('error', err);
+          console.log(err);
         }
 
-        // TODO: winston.log('error', err);
-        console.log(err);
-        return res.json({ success: false, errors: [err.message] });
+        return res.status(400).json({ success: false, errors: [err.message] });
       }
 
       return res.json({ success: true });
