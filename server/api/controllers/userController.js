@@ -16,15 +16,17 @@ exports.list = function(req, res, next) {
   };
 
   let filterOptions = {};
-  try {
-    const filterParam = JSON.parse(req.query['filter']);
-    if (Array.isArray(filterParam) && filterParam.length > 0) {
-      filterParam.forEach((item) => {
-        filterOptions[item.id] = new RegExp(item.value, 'i');
-      });
+  if (req.query['filter']) {
+    try {
+      const filterParam = JSON.parse(req.query['filter']);
+      if (Array.isArray(filterParam) && filterParam.length > 0) {
+        filterParam.forEach((item) => {
+          filterOptions[item.id] = new RegExp(item.value, 'i');
+        });
+      }
+    } catch (err) {
+      console.log('Could not parse \'filter\' param '+ err.message);
     }
-  } catch (err) {
-    console.log('Could not parse \'filter\' param '+ err);
   }
 
   // User.find({}, '-password -__v', (err, users) => {
@@ -37,6 +39,7 @@ exports.list = function(req, res, next) {
       });
     }
 
+    result.success = true;
     return res.json(result);
   });
 };
@@ -240,6 +243,11 @@ function validateUser(user, callback) {
       return callback(new Error(`user.role '${user.role}' is not a valid role`));
   } else {
     return callback(new Error('user.role is required'));
+  }
+
+  if (typeof user.company === 'string' && user.company.trim().length === 0) {
+    // Dis-associate user w/ company
+    user.company = null;
   }
 
   return callback(null, user);

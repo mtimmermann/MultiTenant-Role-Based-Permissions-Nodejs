@@ -16,6 +16,7 @@ module.exports = {
     semi: ['error', 'always'],
     'no-trailing-spaces': ['error'],
     'spaced-comment': ['error', 'always'],
-    'no-multiple-empty-lines': ['error', { 'max': 2, 'maxEOF': 1 }]
+    'no-multiple-empty-lines': ['error', { 'max': 2, 'maxEOF': 1 }],
+    // 'no-param-reassign': ['error', { 'props': false }],
   }
 };

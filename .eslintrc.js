@@ -33,6 +33,9 @@ module.exports = {
     'prefer-template': ['off'],
     'space-infix-ops': ['off'],
     'no-trailing-spaces': ['error'],
+    // 'no-param-reassign': ['error', { 'props': false }],
+    'no-param-reassign': ['off'],
+    'no-underscore-dangle': ['off'],
 
     // curly: ['error', 'multi', 'consistent'],
     'brace-style': 2,

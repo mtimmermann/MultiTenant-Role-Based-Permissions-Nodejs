@@ -13,6 +13,7 @@ const CompanyService = {
    */
   getCompanies: (query, callback) => {
     if (!$.isFunction(callback)) throw new Error('callback function is required');
+    query = query || '';
     Request.get(`/api/companies${query}`, callback);
   },
 

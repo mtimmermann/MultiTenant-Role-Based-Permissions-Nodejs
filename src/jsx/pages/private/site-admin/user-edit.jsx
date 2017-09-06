@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import Utils from '../../../common/utils';
 import Roles from '../../../../shared/roles';
 import UserService from '../../../services/user-service';
+import CompanyService from '../../../services/company-service';
 
 import FormValidationErrors from '../../../components/form-validation-errors';
 import FormSubmitErrors from '../../../components/form-submit-errors';
@@ -16,7 +17,8 @@ class UserEdit extends Component {
     this.state = {
       id: props.match.params.id,
       errors: [],
-      user: { name: '', email: '' },
+      user: { name: '', email: '', company: null },
+      companies: [],
       validation: {
         name: {
           valid: false,
@@ -41,12 +43,22 @@ class UserEdit extends Component {
   componentWillMount() {
     UserService.getUser(this.state.id, (err, data) => {
       if (data && data.success) {
-        this.setState({ user: data.data, isFetching: false });
+        const u = data.data;
+        if (u.company) u.company = u.company._id;
+        this.setState({ user: u, isFetching: false });
 
         // Validate form after inputs are loaded
         Object.keys(this.state.user).forEach((key) => {
           this.validate(key, this.state.user[key]);
         });
+      } else if (err) {
+        this.setState({ errors: [err.message] });
+      }
+    });
+
+    CompanyService.getCompanies(null, (err, data) => {
+      if (data && data.success) {
+        this.setState({ companies: data.docs });
       } else if (err) {
         this.setState({ errors: [err.message] });
       }
@@ -117,6 +129,10 @@ class UserEdit extends Component {
     Roles.map().forEach((role) => {
       roleOptions.push(<option key={role.value} value={role.value}>{role.value}</option>);
     });
+    const companyOptions = [<option key="" value="" />];
+    this.state.companies.forEach((company) => {
+      companyOptions.push(<option key={company.id} value={company.id}>{company.name}</option>);
+    });
     return (
       <div>
         <div className="row">
@@ -145,6 +161,14 @@ class UserEdit extends Component {
                   <div className="col-sm-10">
                     <select className="form-control" id="role" name="role" value={this.state.user.role} onChange={this.changeInput} >
                       {roleOptions}
+                    </select>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label className="col-sm-2 control-label" htmlFor="company">Company</label>
+                  <div className="col-sm-10">
+                    <select className="form-control" id="company" name="company" value={this.state.user.company} onChange={this.changeInput} >
+                      {companyOptions}
                     </select>
                   </div>
                 </div>
