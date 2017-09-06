@@ -14,6 +14,9 @@ const CompanySchema = new mongoose.Schema({
     required: true,
     index: { unique: true }
   }
+}, {
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 });
 
 CompanySchema.plugin(mongoosePaginate);

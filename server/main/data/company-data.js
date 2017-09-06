@@ -10,7 +10,8 @@ const Company = require('mongoose').model('Company');
                      data {object}: The data set of a succesful call
  */
 exports.findBySubdomain = (subdomain, callback) => {
-  Company.find({ subdomain:  subdomain }, (err, result) => {
+  // Case insensitive search for subdomain
+  Company.find({ subdomain: new RegExp(subdomain, 'i')}, (err, result) => {
     if (err || (!result || result.length !== 1)) {
       return callback(err ? err : new Error(`company subdomain '${subdomain}' not found`) );
     }
