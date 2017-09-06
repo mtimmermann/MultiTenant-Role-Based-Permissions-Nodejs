@@ -11,7 +11,8 @@ exports.list = function(req, res, next) {
   const pageOptions = {
     page: req.query['page'] || 1,
     limit: req.query['limit'] || 1000,
-    sort: req.query['sort'] || 'name asc'
+    sort: req.query['sort'] || 'name asc',
+    populate: 'company'
   };
 
   let filterOptions = {};
@@ -44,7 +45,10 @@ exports.list = function(req, res, next) {
 // GET /api/users/:id
 exports.find = function(req, res, next) {
 
-  User.findById(req.params.id, (err, user) => {
+  //User.findById(req.params.id, (err, user) => {
+  User.findById(req.params.id)
+  .populate('company')
+  .exec((err, user) => {
     if (err || !user) {
       if (err) console.log(err);
       return res.status(404).json({

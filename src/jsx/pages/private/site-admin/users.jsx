@@ -61,6 +61,12 @@ class Users extends Component {
         accessor: 'role'
       },
       {
+        Header: 'company',
+        accessor: 'company.name',
+        filterable: false,
+        sortable: false
+      },
+      {
         Header: 'CreatedAt',
         accessor: 'createdAt',
         filterable: false
