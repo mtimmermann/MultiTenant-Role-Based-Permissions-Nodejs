@@ -1,4 +1,5 @@
 const Company = require('mongoose').model('Company');
+const CompanyData = require('../../main/data/company-data');
 const subdomains = require('../../main/common/sub-domains');
 
 // GET /api/companies
@@ -61,18 +62,18 @@ exports.find = function(req, res, next) {
 // Find Company by subdomain
 exports.findBySubdomain = function(req, res, next) {
 
-  Company.find({ subdomain:  req.params.subdomain }, (err, result) => {
-    if (err || (!result && !result.length === 1)) {
+  CompanyData.findBySubdomain(req.params.subdomain, (err, company) => {
+    if (err) {
       if (err) console.log(err);
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
-        errors: [ err ? err.message : `company subdomain '${req.params.subdomain} not found'` ]
+        errors: [ err.message ]
       });
     }
 
     return res.json({
       success: true,
-      data: result[0]
+      data: company
     });
   });
 };

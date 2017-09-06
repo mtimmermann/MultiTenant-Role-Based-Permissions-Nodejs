@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-// // const bcrypt = require('bcrypt'); // Use bcryptjs for Windows, bcrypt for Linux
-// const bcrypt = require('bcryptjs');
-const utils = require('../main/common/utils');
+const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
 const timestamps = require('mongoose-timestamp');
+const utils = require('../main/common/utils');
 
 const Roles = require('../../src/shared/roles');
 
@@ -21,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: Roles.user,
     enum: [Roles.user, Roles.siteAdmin] // Accept only these roles
+  },
+  company: {
+    type: Schema.ObjectId,
+    ref: 'Company'
   },
   password: String
 });

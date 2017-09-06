@@ -14,7 +14,7 @@ exports.postSignup = function(req, res, next) {
 
   return passport.authenticate('local-signup', (err) => {
     if (err) {
-      console.log(JSON.stringify(err));
+      console.log(err);
 
       if (err.name === 'MongoError' && err.code === 11000) {
         // 11000 Mongo code is for a duplication email error
@@ -59,6 +59,11 @@ exports.postLogin = function(req, res, next) {
         return res.status(400).json({
           success: false,
           message: err.message
+        });
+      } else if (err.name === 'NotAuthorized') {
+        return res.status(401).json({
+          success: false,
+          message: 'Not Authorized'
         });
       }
 
