@@ -3,6 +3,7 @@ const Roles = require('../../../src/shared/roles');
 const utils = require('../../main/common/utils');
 const AuthHeader = require('../../main/common/auth-header');
 const { validations } = require('../../config');
+const { ErrorTypes, ModelValidationError } = require('../../main/common/errors');
 
 /**
  * List users, optional pagination options
@@ -152,7 +153,14 @@ exports.updateUser = function(req, res, next) {
 
   updateUser(user, (err, data) => {
     if (err) {
-      if (err) console.log(err);
+      if (err.name && err.name === ErrorTypes.ModelValidation) {
+        // TODO: winston.log('info', err.toString());
+        console.log(err.toString());
+        return res.status(400).json({ success: false, errors: [err.message] });
+      }
+
+      // TODO: winston.log('error', err);
+      console.log(err);
       return res.json({ success: false, errors: [err.message] });
     }
 
@@ -181,7 +189,14 @@ exports.updateProfile = function(req, res, next) {
 
     updateUser(user, (err, data) => {
       if (err) {
-        if (err) console.log(err);
+        if (err.name && err.name === ErrorTypes.ModelValidation) {
+          // TODO: winston.log('info', err.toString());
+          console.log(err.toString());
+          return res.status(400).json({ success: false, errors: [err.message] });
+        }
+
+        // TODO: winston.log('error', err);
+        console.log(err);
         return res.json({ success: false, errors: [err.message] });
       }
 
@@ -249,38 +264,35 @@ function updateUser(user, callback) {
 
 function validateUser(user, callback) {
 
-  if (typeof user.name === 'string') {
-    user.name = user.name.trim();
-    if (user.name.length === 0)
-      return callback(new Error('user.name length is 0'));
-  } else {
-    return callback(new Error('user.name is required'));
+  user.name = typeof user.name === 'string' ? user.name.trim() : null;
+  if (!user.name || (user.name && user.name.length === 0)) {
+    return callback(new ModelValidationError('user.name is required'));
   }
 
   if (typeof user.email === 'string') {
     user.email = user.email.trim();
-    if (!(validations.email.regex.value).test(user.email))
-      return callback(new Error(validations.email.regex.message));
+    if (!(validations.email.regex.value).test(user.email)) {
+      return callback(new ModelValidationError(validations.email.regex.message));
+    }
   } else {
-    return callback(new Error('user.email is required'));
+    return callback(new ModelValidationError('user.email is required'));
   }
 
   if (typeof user.role === 'string') {
     user.role = user.role.trim();
-    if (!Roles.isValidRole(user.role))
-      return callback(new Error(`user.role '${user.role}' is not a valid role`));
+    if (!Roles.isValidRole(user.role)) {
+      return callback(new ModelValidationError(`user.role '${user.role}' is not a valid role`));
+    }
   } else {
-    return callback(new Error('user.role is required'));
+    return callback(new ModelValidationError('user.role is required'));
   }
 
   if (typeof user.company === 'string') {
     const company = user.company.trim();
     if (company.length === 0) {
       user.company = null; // Dis-associate user w/ company
-    } else {
-      if (user.role === Roles.siteAdmin) {
-        return callback(new Error('SiteAdmin cannot be associated with a Company'));
-      }
+    } else if (user.role === Roles.siteAdmin) {
+      return callback(new ModelValidationError('SiteAdmin cannot be associated with a Company'));
     }
   }
 
