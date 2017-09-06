@@ -50,7 +50,7 @@ class NavBar extends React.Component {
                   </a>
                   <ul className="dropdown-menu">
                     <li><NavLink to="/siteadmin/companies" activeClassName="active">Company Admin</NavLink></li>
-                    <li><NavLink to="/siteadmin/users" activeClassName="active">Users Admin</NavLink></li>
+                    <li><NavLink to="/siteadmin/users" activeClassName="active">Global Users Admin</NavLink></li>
                   </ul>
                 </li>
               }

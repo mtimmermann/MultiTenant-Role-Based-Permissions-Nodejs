@@ -5,6 +5,7 @@ import ReactTable from 'react-table';
 import Roles from '../../../../shared/roles';
 import FormSubmitErrors from '../../../components/form-submit-errors';
 import UserService from '../../../services/user-service';
+import Utils from '../../../common/utils';
 
 class Users extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class Users extends Component {
 
     this.state = {
       companyId: this.props.match.params.companyId || '',
+      query: '',
       errors: [],
       data: [],
       pages: null,
@@ -21,16 +23,26 @@ class Users extends Component {
     this.fetchData = this.fetchData.bind(this);
   }
 
-  fetchData(state, /* instance */) {
+  componentWillReceiveProps(nextProps) {
 
-    let sort = '';
-    state.sorted.forEach((item) => {
-      const dir = item.desc ? '-' : '';
-      sort += dir + item.id +' ';
-    });
+    // This code block is effectively forcing a re-render of the ReactTable.
+    // When the previous route is switched for example:
+    //    from: /siteadmin/companies/:companyID/users
+    //    to:   /siteadmin/users
+    //  the table is not re-rendered since both routes use the same 'Users'
+    //  component. This code block detects the route switch and updates
+    //  the query appropiatly and re-fetches the data
+    const routeChanged = nextProps.location !== this.props.location;
+    if (routeChanged) {
+      const queryObj = Utils.parseQueryString(this.state.query);
+      queryObj.companyId = nextProps.match.params.companyId || '';
+      const query = `?${$.param(queryObj)}`;
+      this.setState({ companyId: '' });
+      this.getUsers(query);
+    }
+  }
 
-    const query = `?page=${state.page+1}&limit=${state.pageSize}&sort=${sort}&filter=${JSON.stringify(state.filtered)}&companyId=${this.state.companyId}`;
-
+  getUsers(query) {
     UserService.getUsers(query, (err, data) => {
       if (err) {
         this.setState({ errors: [err.message] });
@@ -43,6 +55,18 @@ class Users extends Component {
         });
       }
     });
+  }
+  fetchData(state, /* instance */) {
+    let sort = '';
+    state.sorted.forEach((item) => {
+      const dir = item.desc ? '-' : '';
+      sort += dir + item.id +' ';
+    });
+
+    const query = `?page=${state.page+1}&limit=${state.pageSize}&sort=${sort}` +
+      `&filter=${JSON.stringify(state.filtered)}&companyId=${this.state.companyId}`;
+    this.setState({ query /* :query */ });
+    this.getUsers(query);
   }
 
   render() {
@@ -127,10 +151,12 @@ Users.propTypes = {
     params: PropTypes.shape({
       companyId: PropTypes.string
     })
-  })
+  }),
+  location: PropTypes.shape({}).isRequired
 };
 Users.defaultProps = {
   match: { companyId: '' }
 };
+
 
 export default Users;

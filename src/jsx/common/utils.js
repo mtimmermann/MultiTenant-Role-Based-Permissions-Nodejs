@@ -8,6 +8,24 @@ const Utils =
   return {
 
     /**
+     * Creates an object from a query string
+     *
+     * Note: If parsing from the actual url, use window.decodeUriComponent()
+     *       before passing query into method
+     *
+     * @param   {string} query Query string to parse
+     * @returns {object} Object with the query string key value pairs
+     */
+    parseQueryString: (query) => {
+      const queryObj = {};
+      query.replace(
+        new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
+        ($0, $1, $2, $3) => { queryObj[$1] = $3; }
+      );
+      return queryObj;
+    },
+
+    /**
      * Alternative to setTimeout, will execute callback in true time based on a timestamp;
      * as some browsers timing varies w/ setTimeout
      * @param {number} interval Time to wait in milliseconds
