@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import async from 'async';
 
 import Utils from '../../../common/utils';
 import Roles from '../../../../shared/roles';
@@ -17,7 +18,7 @@ class UserEdit extends Component {
     this.state = {
       id: props.match.params.id,
       errors: [],
-      user: { name: '', email: '', company: null },
+      user: { name: '', email: '', company: '' },
       companies: [],
       validation: {
         name: {
@@ -41,26 +42,33 @@ class UserEdit extends Component {
   }
 
   componentWillMount() {
-    UserService.getUser(this.state.id, (err, data) => {
-      if (data && data.success) {
-        const u = data.data;
-        if (u.company) u.company = u.company._id;
-        this.setState({ user: u, isFetching: false });
-
-        // Validate form after inputs are loaded
-        Object.keys(this.state.user).forEach((key) => {
-          this.validate(key, this.state.user[key]);
-        });
-      } else if (err) {
-        this.setState({ errors: [err.message] });
+    var self = this;
+    async.parallel({
+      user: (callback) => {
+        UserService.getUser(this.state.id, callback);
+      },
+      companies: (callback) => {
+        CompanyService.getCompanies(null, callback);
       }
-    });
+    }, function(err, results) {
+      if (err) self.setState({ errors: [err.message] });
+      else if (results) {
+        if (results.user && results.user.success) {
+          const u = results.user.data;
+          if (u.company) u.company = u.company._id;
+          self.setState({ user: u });
 
-    CompanyService.getCompanies(null, (err, data) => {
-      if (data && data.success) {
-        this.setState({ companies: data.docs });
-      } else if (err) {
-        this.setState({ errors: [err.message] });
+          // Validate form after inputs are loaded
+          Object.keys(self.state.user).forEach((key) => {
+            self.validate(key, self.state.user[key]);
+          });
+        }
+
+        if (results.companies && results.companies.success) {
+          self.setState({ companies: results.companies.docs });
+        }
+
+        self.setState({ isFetching: false });
       }
     });
   }
