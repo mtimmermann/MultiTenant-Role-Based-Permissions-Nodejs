@@ -65,7 +65,7 @@ subdomains.init(app);
 app.get('*', function (req, res, next) {
   const subdomain = subdomains.match(app, req.subdomains);
   if (subdomain) {
-    res.sendFile(path.resolve(__dirname, 'dist', `client-html/${subdomain}.html`));
+    res.sendFile(path.resolve(__dirname, 'dist', `client-branding/html/${subdomain}.html`));
   } else {
     res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
   }

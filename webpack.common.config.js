@@ -88,7 +88,7 @@ module.exports = {
       { from: './robots.txt' },
       { from: './favicon.ico' },
       { from: './img/**/*', to: './' },
-      { from: './client-html/**/*', to: './' },
+      { from: './client-branding/**/*', to: './' },
       { from: '../node_modules/react-table/react-table.css', to: './css' }
     ]),
     new webpack.ProvidePlugin({
