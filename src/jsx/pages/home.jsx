@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 class Home extends Component {
   render() {
     return (
-      <h3>Home Page {this.props.company.name && `- ${this.props.company.name}`}</h3>
+      <div className="branding-home-header">
+        <h3>Home Page {this.props.company.name && `- ${this.props.company.name}`}</h3>
+      </div>
     );
   }
 }

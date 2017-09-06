@@ -11,6 +11,9 @@
     "watch": "webpack --watch --progress",
     "build:dev": "webpack",
     "build:prod": "webpack --config ./webpack.prod.config.js",
+    "watch:branding": "webpack --config ./webpack.site-branding.config.js --watch --progress",
+    "build:dev:branding": "webpack --config ./webpack.site-branding.config.js",
+    "build:prod:branding": "set arg=prod&&webpack --config ./webpack.site-branding.config.js",
     "start:dev": "nodemon app.js",
     "start1:": "if-env NODE_ENV=production && npm run build:prod && node app.js || npm run start:dev",
     "start": "node app.js"
