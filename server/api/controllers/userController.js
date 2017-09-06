@@ -4,13 +4,32 @@ const utils = require('../../main/common/utils');
 const AuthHeader = require('../../main/common/auth-header');
 const { validations } = require('../../config');
 
-// GET /api/users
-// List users, paginations options
+/**
+ * List users, optional pagination options
+ * GET /api/users
+ *
+ * query pagination options:
+ *  page  {number}
+ *  limit {number}
+ *  sort  {string} e.g. 'name asc', '-name', 'name'
+ *
+ * query 'filter' options (filter by: name, email, role):
+ *  filter {array}
+ *     eg: [{"id":"name","value":"text"},
+ *          {"id":"email","value":"text"},
+ *          {"id":"role","value":"text"}]
+ *
+ * query companyId options:
+ *  companyId {string}
+ *    companyId=''             No filter, return/paginate from all users in database
+ *    companyId='<id>'         Return/paginate only users associated with companyId
+ *    companyId='unassociated' Return/paginate all users with no associated companyId
+ */
 exports.list = function(req, res, next) {
 
   const pageOptions = {
     page: req.query['page'] || 1,
-    limit: req.query['limit'] || 1000,
+    limit: req.query['limit'] || 10000,
     sort: req.query['sort'] || 'name asc',
     populate: 'company'
   };
@@ -29,8 +48,13 @@ exports.list = function(req, res, next) {
     }
   }
 
-  if (req.query['companyId']) {
-    filterOptions.company = req.query['companyId'];
+  const companyId = req.query['companyId'];
+  if (companyId) {
+    if (companyId.toLowerCase() === 'unassociated') {
+      filterOptions.company = { $exists: false };
+    } else {
+      filterOptions.company = companyId;
+    }
   }
 
   // User.find({}, '-password -__v', (err, users) => {
