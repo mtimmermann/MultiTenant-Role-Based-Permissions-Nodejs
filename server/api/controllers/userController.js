@@ -272,9 +272,15 @@ function validateUser(user, callback) {
     return callback(new Error('user.role is required'));
   }
 
-  if (typeof user.company === 'string' && user.company.trim().length === 0) {
-    // Dis-associate user w/ company
-    user.company = null;
+  if (typeof user.company === 'string') {
+    const company = user.company.trim();
+    if (company.length === 0) {
+      user.company = null; // Dis-associate user w/ company
+    } else {
+      if (user.role === Roles.siteAdmin) {
+        return callback(new Error('SiteAdmin cannot be associated with a Company'));
+      }
+    }
   }
 
   return callback(null, user);
