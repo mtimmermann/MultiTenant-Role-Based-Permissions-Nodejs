@@ -11,6 +11,7 @@ class Users extends Component {
     super(props);
 
     this.state = {
+      companyId: this.props.match.params.companyId || '',
       errors: [],
       data: [],
       pages: null,
@@ -28,7 +29,7 @@ class Users extends Component {
       sort += dir + item.id +' ';
     });
 
-    const query = `?page=${state.page+1}&limit=${state.pageSize}&sort=${sort}&filter=${JSON.stringify(state.filtered)}`;
+    const query = `?page=${state.page+1}&limit=${state.pageSize}&sort=${sort}&filter=${JSON.stringify(state.filtered)}&companyId=${this.state.companyId}`;
 
     UserService.getUsers(query, (err, data) => {
       if (err) {
@@ -121,7 +122,15 @@ class Users extends Component {
   }
 }
 Users.propTypes = {
-  role: PropTypes.string.isRequired
+  role: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      companyId: PropTypes.string
+    })
+  })
+};
+Users.defaultProps = {
+  match: { companyId: '' }
 };
 
 export default Users;

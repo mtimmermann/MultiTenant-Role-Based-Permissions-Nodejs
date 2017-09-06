@@ -29,6 +29,10 @@ exports.list = function(req, res, next) {
     }
   }
 
+  if (req.query['companyId']) {
+    filterOptions.company = req.query['companyId'];
+  }
+
   // User.find({}, '-password -__v', (err, users) => {
   User.paginate(filterOptions, pageOptions, (err, result) => {
     if (err) {
@@ -48,23 +52,22 @@ exports.list = function(req, res, next) {
 // GET /api/users/:id
 exports.find = function(req, res, next) {
 
-  //User.findById(req.params.id, (err, user) => {
   User.findById(req.params.id)
-  .populate('company')
-  .exec((err, user) => {
-    if (err || !user) {
-      if (err) console.log(err);
-      return res.status(404).json({
-        success: false,
-        errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
-      });
-    }
+    .populate('company')
+    .exec((err, user) => {
+      if (err || !user) {
+        if (err) console.log(err);
+        return res.status(404).json({
+          success: false,
+          errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
+        });
+      }
 
-    return res.json({
-      success: true,
-      data: user
+      return res.json({
+        success: true,
+        data: user
+      });
     });
-  });
 };
 
 

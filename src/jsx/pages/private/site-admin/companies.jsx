@@ -71,6 +71,10 @@ class Companies extends Component {
               <span className="glyphicon glyphicon-trash" aria-hidden="true" />
               Delete
             </NavLink>
+            <NavLink className="btn btn-default btn-xs m-l-xs" to={`/siteadmin/companies/${row.value}/users`}>
+              <span className="glyphicon glyphicon-cog" aria-hidden="true" />
+              User Admin
+            </NavLink>
           </div>
         )
         /* eslint-enable arrow-body-style */
