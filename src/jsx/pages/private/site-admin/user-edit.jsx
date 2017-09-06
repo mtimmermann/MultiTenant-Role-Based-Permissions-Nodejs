@@ -42,7 +42,7 @@ class UserEdit extends Component {
   }
 
   componentWillMount() {
-    var self = this;
+    const self = this;
     async.parallel({
       user: (callback) => {
         UserService.getUser(this.state.id, callback);
@@ -50,7 +50,7 @@ class UserEdit extends Component {
       companies: (callback) => {
         CompanyService.getCompanies(null, callback);
       }
-    }, function(err, results) {
+    }, (err, results) => {
       if (err) self.setState({ errors: [err.message] });
       else if (results) {
         if (results.user && results.user.success) {
