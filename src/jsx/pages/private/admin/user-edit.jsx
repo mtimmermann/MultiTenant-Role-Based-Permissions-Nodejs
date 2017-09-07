@@ -147,6 +147,11 @@ class UserEdit extends Component {
     const validation = this.state.validation;
     const roleOptions = [];
     Roles.map().forEach((role) => {
+      console.log(`role.value === Roles.siteAdmin -> ${role.value === Roles.siteAdmin}`);
+      console.log(`this.props.role === Roles.siteAdmin -> ${this.props.role === Roles.siteAdmin}`);
+      if (role.value === Roles.siteAdmin && this.props.role !== Roles.siteAdmin) {
+        return; // skip
+      }
       roleOptions.push(<option key={role.value} value={role.value}>{role.value}</option>);
     });
     const companyOptions = [<option key="" value="" />];
@@ -157,7 +162,7 @@ class UserEdit extends Component {
       <div>
         <div className="row">
           <div className="col-sm-4 col-md-4 col-lg-4 form-header">
-            <h4>Edit Profile</h4>
+            <h4>Edit User</h4>
           </div>
         </div>
         <div className="row">
