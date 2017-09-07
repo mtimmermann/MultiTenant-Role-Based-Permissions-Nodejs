@@ -1,6 +1,6 @@
 const AuthHeader = require('../../main/data/auth-header');
 const User = require('mongoose').model('User');
-const UserAuthResponse = require('../../main/data/user-auth-response');
+const AdminAuthResponse = require('../../main/data/admin-auth-response');
 const Roles = require('../../../src/shared/roles');
 const utils = require('../../main/common/utils');
 const { validations } = require('../../config');
@@ -30,7 +30,7 @@ const { ErrorTypes, ModelValidationError } = require('../../main/common/errors')
 exports.list = function(req, res, next) {
 
   /* eslint-disable indent */
-  UserAuthResponse.getAuthAdmin(
+  AdminAuthResponse.getAuthAdmin(
         req.headers.authorization,
         req.baseUrl + req.path,
         (errPackage, authAdmin) => {
@@ -96,7 +96,7 @@ exports.list = function(req, res, next) {
       result.success = true;
       return res.json(result);
     });
-  }); /* UserAuthResponse.getAuthAdmin */
+  }); /* AdminAuthResponse.getAuthAdmin */
   /* eslint-enable indent */
 };
 
@@ -105,7 +105,7 @@ exports.list = function(req, res, next) {
 exports.find = function(req, res, next) {
 
   /* eslint-disable indent */
-  UserAuthResponse.getAuthAdmin(
+  AdminAuthResponse.getAuthAdmin(
         req.headers.authorization,
         req.baseUrl + req.path,
         (errPackage, authAdmin) => {
@@ -129,7 +129,7 @@ exports.find = function(req, res, next) {
 
         // If auth admin is not associated with the user's company; reject, not authorized
         const notAuthCompErrPackage =
-          UserAuthResponse.adminCompanyNotAuthorized(
+          AdminAuthResponse.adminCompanyNotAuthorized(
             authAdmin,
             user.company ? user.company.id : null); /* companyId */
         if (notAuthCompErrPackage) {
@@ -143,7 +143,7 @@ exports.find = function(req, res, next) {
           data: user
         });
     }); /* User.findById */
-  }); /* UserAuthResponse.getAuthAdmin */
+  }); /* AdminAuthResponse.getAuthAdmin */
   /* eslint-enable indent */
 };
 
@@ -203,21 +203,42 @@ exports.updateUser = function(req, res, next) {
   const user = req.body.user;
   delete user.password;
 
-  updateUser(user, true /* isRoleRequired */, (err, data) => {
-    if (err) {
-      if (err.name && err.name === ErrorTypes.ModelValidation) {
-        // TODO: winston.log('info', err.toString());
-        console.log(err.toString());
-      } else {
-        // TODO: winston.log('error', err);
-        console.log(err);
-      }
+  /* eslint-disable indent */
+  // Ensure the admin user is authorized to access and update the user data
+  // - If SiteAdmin, yes
+  // - If Admin, only if admin and user are associated with the same company
+  AdminAuthResponse.getAuthAdminForUser(
+        req.headers.authorization,
+        req.body.user.id,
+        req.baseUrl + req.path,
+        (errPackage, authAdmin) => {
 
-      return res.status(400).json({ success: false, errors: [err.message] });
+    if (errPackage) {
+      // TODO: winston.log('warn', errPackage.error.toString());
+      console.log(errPackage.error.toString());
+      return res.status(errPackage.status).json(errPackage.res);
     }
 
-    return res.json({ success: true });
+
+    // Admin user authorizatin success, update the user
+    updateUser(user, true /* isRoleRequired */, (err, data) => {
+      if (err) {
+        if (err.name && err.name === ErrorTypes.ModelValidation) {
+          // TODO: winston.log('info', err.toString());
+          console.log(err.toString());
+        } else {
+          // TODO: winston.log('error', err);
+          console.log(err);
+        }
+
+        return res.status(400).json({ success: false, errors: [err.message] });
+      }
+
+      return res.json({ success: true });
+    });
+
   });
+  /* eslint-enable indent */
 };
 
 

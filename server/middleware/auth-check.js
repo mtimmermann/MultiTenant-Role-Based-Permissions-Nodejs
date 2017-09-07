@@ -34,7 +34,10 @@ module.exports = function(roles) {
         if (roles) {
           if (roles.indexOf(user.role) > -1) return next();
           // else return res.status(401).end();
-          else return res.status(403).end();
+          else return res.status(403).json({
+            success: false,
+            errors: [ `User role: ${user.role} not authorized for ${req.baseUrl}${req.path}` ]
+          }).end();
         }
 
         return next();

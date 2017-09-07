@@ -10,7 +10,14 @@ module.exports = {
   },
   rules: {
     'comma-dangle': ['error', 'never'],
-    indent: ['error', 2, {'SwitchCase': 1}],
+    indent: [
+      'error', 2,
+      {
+        'SwitchCase': 1,
+        'MemberExpression': 0
+      }
+    ],
+
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
