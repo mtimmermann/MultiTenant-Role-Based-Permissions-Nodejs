@@ -57,8 +57,14 @@ class UserEdit extends Component {
         }
       }
     }, (err, results) => {
-      if (err) self.setState({ errors: [err.message] });
-      else if (results) {
+      if (err) {
+        const result = results.user || results.companies;
+        if (result && result.errors && result.errors.length > 0) {
+          self.setState({ errors: result.errors });
+        } else {
+          self.setState({ errors: [err.message] });
+        }
+      } else if (results) {
         if (results.user && results.user.success) {
           const u = results.user.data;
           if (u.company) u.company = u.company._id;

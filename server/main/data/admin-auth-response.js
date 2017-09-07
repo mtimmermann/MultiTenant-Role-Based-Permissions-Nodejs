@@ -157,7 +157,7 @@ exports.getAuthAdminForCompanyId = (authAdmin, companyId, callback) => {
         `with requested user company.id: ${companyId}. Not authorized`;
 
       const err = new UserAuthResponseError(message);
-      return callback(new rrorAuthPackage(403, err));
+      return callback(new ErrorAuthPackage(403, err));
     }
   }
 
