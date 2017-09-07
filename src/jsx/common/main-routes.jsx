@@ -13,17 +13,17 @@ import Public1 from '../pages/public1';
 import Profile from '../pages/private/profile';
 import ProfilePassword from '../pages/private/profile-password';
 import Private1 from '../pages/private/private1';
-import Admin1 from '../pages/private/admin1';
+import Admin1 from '../pages/private/admin/admin1';
+
+import Users from '../pages/private/admin/users';
+import UserEdit from '../pages/private/admin/user-edit';
+import UserDelete from '../pages/private/admin/user-delete';
+import UserPassword from '../pages/private/admin/user-password';
 
 import Companies from '../pages/private/site-admin/companies';
 import CompanyNew from '../pages/private/site-admin/company-new';
 import CompanyEdit from '../pages/private/site-admin/company-edit';
 import CompanyDelete from '../pages/private/site-admin/company-delete';
-
-import Users from '../pages/private/site-admin/users';
-import UserEdit from '../pages/private/site-admin/user-edit';
-import UserDelete from '../pages/private/site-admin/user-delete';
-import UserPassword from '../pages/private/site-admin/user-password';
 
 class MainRoutes extends React.Component {
   render() {

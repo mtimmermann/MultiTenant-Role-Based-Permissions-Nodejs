@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import MessageService from '../../services/message-service';
+import MessageService from '../../../services/message-service';
 
 class Admin1 extends Component {
   constructor(props) {
