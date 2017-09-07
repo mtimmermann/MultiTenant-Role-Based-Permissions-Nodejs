@@ -56,11 +56,11 @@ class CompanyDelete extends Component {
           <div className="col-sm-1 col-md-1 col-lg-1" />
           <div className="col-sm-4 col-md-4 col-lg-4">
             <div className="row">
-              <strong className="col-xs-2 col-sm-2 col-md-2">Company Name</strong>
+              <strong className="col-xs-6 col-sm-8 col-md-6 col-lg-4">Company Name</strong>
               <div className="col-xs-4 col-sm-4 col-md-4">{company.name}</div>
             </div>
             <div className="row m-t-xs">
-              <strong className="col-xs-2 col-sm-2 col-md-2">Sub Domain</strong>
+              <strong className="col-xs-6 col-sm-8 col-md-6 col-lg-4">Sub Domain</strong>
               <div className="col-xs-4 col-sm-4 col-md-4">{company.subdomain}</div>
             </div>
             <div className="row m-t-md">

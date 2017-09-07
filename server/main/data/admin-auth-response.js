@@ -20,9 +20,9 @@ class ErrorAuthPackage {
  * Get authorized user from the authorization token id
  *
  * @param {string}   authHeader Encrypted token
- * @param {string}   urlPath request url path
- * @param {function} callback (errorPackage, data)
-                     The function that is called after a service call
+ * @param {string}   urlPath    request url path
+ * @param {function} callback   (errorPackage, data)
+                     The function that is called after async call
                      errorPackage {ErrorAuthPackage}: null if no error
                      data         {object}: The data set of a succesful call
  */
@@ -38,7 +38,7 @@ exports.getAuthAdmin = (authHeader, urlPath, callback) => {
     }
 
     // Get the Authenticated admin user
-    findAdminUserResponse(authId, (errPackage, adminUser) => {
+    findAdminUserResponse(authId, urlPath, (errPackage, adminUser) => {
       if (errPackage) return callback(errPackage); /* instaceof ErrorAuthPackage */
       return callback(null, adminUser);
     });
@@ -54,7 +54,7 @@ exports.getAuthAdmin = (authHeader, urlPath, callback) => {
  * @param {string}   userId     User id, admin requesting authorization for
  * @param {string}   urlPath    request url path
  * @param {function} callback   (errorPackage, data)
-                     The function that is called after a service call
+                     The function that is called after async call
                      errorPackage {ErrorAuthPackage}: null if no error
                      data         {object}: The data set of a succesful call
  */
@@ -71,7 +71,7 @@ exports.getAuthAdminForUser = (authHeader, userId, urlPath, callback) => {
 
     async.parallel({
       adminUser: (cb) => {
-        findAdminUserResponse(authId, cb);
+        findAdminUserResponse(authId, urlPath, cb);
       },
       user: (cb) => {
         User.findById(userId)
@@ -138,7 +138,7 @@ exports.getAuthAdminForUser = (authHeader, userId, urlPath, callback) => {
  * @param {object}   authAdmin  Authenticated Admin user
  * @param {string}   companyId  Company ID
  * @param {function} callback   (errorPackage, data)
-                     The function that is called after a service call
+                     The function that is called after async call
                      errorPackage {ErrorAuthPackage}: null if no error
  */
 exports.getAuthAdminForCompanyId = (authAdmin, companyId, callback) => {
@@ -169,12 +169,13 @@ exports.getAuthAdminForCompanyId = (authAdmin, companyId, callback) => {
  * Find authenticated admin user
  *
  * @param {string}   adminUserId Admin user id
- * @param {function} callback   (errorPackage, data)
-                     The function that is called after a service call
+ * @param {string}   urlPath     request url path
+ * @param {function} callback    (errorPackage, data)
+                     The function that is called after async call
                      errorPackage {ErrorAuthPackage}: null if no error
                      data         {object}: The data set of a succesful call
  */
-function findAdminUserResponse(adminUserId, callback) {
+function findAdminUserResponse(adminUserId, urlPath, callback) {
 
   // Get the Authenticated admin user
   User.findById(adminUserId)

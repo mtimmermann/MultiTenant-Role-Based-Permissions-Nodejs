@@ -1,5 +1,6 @@
 const Company = require('mongoose').model('Company');
 const CompanyData = require('../../main/data/company-data');
+const User = require('mongoose').model('User');
 const subdomains = require('../../main/common/sub-domains');
 const { ErrorTypes, ModelValidationError } = require('../../main/common/errors');
 
@@ -148,6 +149,9 @@ exports.destroy = function(req, res, next) {
       });
     }
 
+    // Orphan users. Fire and forget
+    orphanUsers(company.id, (err) => {});
+
     return res.json({
       success: true,
       data: company
@@ -166,6 +170,29 @@ function updateCompany(company, callback) {
 
       return callback(null, data);
     });
+  });
+}
+
+/**
+ * Set all users company field to null within the associated companyId
+ *
+ * @param {string}   companyId Encrypted token
+ * @param {function} callback (err)
+                     The function that is called after async call
+                     err {ErrorAuthPackage}: null if no error
+                     data         {object}: The data set of a succesful call
+ */
+function orphanUsers(companyId, callback) {
+  User.update({company: companyId}, {company: null}, {multi: true}, (err, results) => {
+    if (err) {
+      // TODO: winston.log('error', err);
+      console.log(err);
+      return callback(err);
+    }
+
+    // TODO: winston.log('info', `orphan user results: ${JSON.stringify(results)}`);
+    console.log(`orphan user results: ${JSON.stringify(results)}`);
+    return callback(null);
   });
 }
 

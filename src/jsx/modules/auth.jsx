@@ -88,7 +88,7 @@ const Auth = {
   /**
    * Get Company ojbect { name & subdomain }
    * @param {function} callback (err, data)
-                       The function that is called after a service call
+                       The function that is called after the async call
                        error {object}: null if no error
                        data {object}: The data set of a succesful call
    */
