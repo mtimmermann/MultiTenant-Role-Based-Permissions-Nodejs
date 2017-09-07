@@ -128,19 +128,15 @@ exports.find = function(req, res, next) {
         }
 
         // If auth admin is not associated with the user's company; reject, not authorized
-        const notAuthCompErrPackage =
-          AdminAuthResponse.adminCompanyNotAuthorized(
-            authAdmin,
-            user.company ? user.company.id : null); /* companyId */
-        if (notAuthCompErrPackage) {
-          // TODO: winston.log('warn', errPackage.error.toString());
-          console.log(notAuthCompErrPackage.error.toString());
-          return res.status(notAuthCompErrPackage.status).json(notAuthCompErrPackage.res);
-        }
+        const cId = user.company ? user.company.id : null;
+        AdminAuthResponse.getAuthAdminForCompanyId(authAdmin, cId, (errPackage) => {
+          if (errPackage) return res.status(errPackage.status).json(errPackage.res);
 
-        return res.json({
-          success: true,
-          data: user
+          // Admin authorized success, return user
+          return res.json({
+            success: true,
+            data: user
+          });
         });
     }); /* User.findById */
   }); /* AdminAuthResponse.getAuthAdmin */

@@ -130,17 +130,21 @@ exports.getAuthAdminForUser = (authHeader, userId, urlPath, callback) => {
   }); /* AuthHeader.getId */
 };
 
+
 /**
- * Check if authenticated Admin is authorized to access company data
+ * Get authorized admin user from the authorization token id, and verify
+ * the admin has authorization to the input userId data
  *
- * @param   {object} authAdmin Authenticated Admin user
- * @param   {string} companyId Company ID
- * @returns {ErrorAuthPackage} null if admin is authorized
+ * @param {object}   authAdmin  Authenticated Admin user
+ * @param {string}   companyId  Company ID
+ * @param {function} callback   (errorPackage, data)
+                     The function that is called after a service call
+                     errorPackage {ErrorAuthPackage}: null if no error
  */
-exports.adminCompanyNotAuthorized = (authAdmin, companyId) => {
+exports.getAuthAdminForCompanyId = (authAdmin, companyId, callback) => {
 
   // If auth admin is not associated with the user's company,
-  //  reject, not authorized
+  //  403 reject, not authorized
   if (authAdmin.role === Roles.admin) {
     if (authAdmin.company.id !== companyId) {
       const u = {
@@ -152,13 +156,12 @@ exports.adminCompanyNotAuthorized = (authAdmin, companyId) => {
       const message = `'Admin' user ${JSON.stringify(u)} is not associated `+
         `with requested user company.id: ${companyId}. Not authorized`;
 
-
       const err = new UserAuthResponseError(message);
-      return new ErrorAuthPackage(403, err);
+      return callback(new rrorAuthPackage(403, err));
     }
   }
 
-  return null;
+  return callback(null);
 };
 
 
