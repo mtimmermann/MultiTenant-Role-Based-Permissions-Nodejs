@@ -32,7 +32,7 @@ exports.list = function(req, res, next) {
   /* eslint-disable indent */
   AdminAuthResponse.getAuthAdmin(
         req.headers.authorization,
-        req.baseUrl + req.path,
+        req.method+' '+req.baseUrl + req.path,
         (errPackage, authAdmin) => {
 
     if (errPackage) {
@@ -107,7 +107,7 @@ exports.find = function(req, res, next) {
   /* eslint-disable indent */
   AdminAuthResponse.getAuthAdmin(
         req.headers.authorization,
-        req.baseUrl + req.path,
+        req.method+' '+req.baseUrl + req.path,
         (errPackage, authAdmin) => {
 
     if (errPackage) {
@@ -199,14 +199,14 @@ exports.updateUser = function(req, res, next) {
   const user = req.body.user;
   delete user.password;
 
-  /* eslint-disable indent */
   // Ensure the admin user is authorized to access and update the user data
   // - If SiteAdmin, yes
   // - If Admin, only if admin and user are associated with the same company
+  /* eslint-disable indent */
   AdminAuthResponse.getAuthAdminForUser(
         req.headers.authorization,
         req.body.user.id,
-        req.baseUrl + req.path,
+        req.method+' '+req.baseUrl + req.path,
         (errPackage, authAdmin) => {
 
     if (errPackage) {
@@ -233,7 +233,7 @@ exports.updateUser = function(req, res, next) {
       return res.json({ success: true });
     });
 
-  });
+  }); /* AdminAuthResponse.getAuthAdminForUser */
   /* eslint-enable indent */
 };
 
@@ -246,6 +246,7 @@ exports.updateProfile = function(req, res, next) {
 
   AuthHeader.getId(req.headers.authorization, function(err, authId) {
     if (err) {
+      // TODO: winston.log('error', err);
       console.log(err);
       return res.status(409).json({ success: false, errors: [err.message] });
     }
@@ -278,20 +279,39 @@ exports.updateProfile = function(req, res, next) {
 // DELETE /api/users/:id
 exports.destroy = function(req, res, next) {
 
-  User.findByIdAndRemove(req.params.id, (err, user) => {
-    if (err || !user) {
-      if (err) console.log(err);
-      return res.status(404).json({
-        success: false,
-        errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
-      });
+  // Ensure the admin user is authorized to access and update the user data
+  // - If SiteAdmin, yes
+  // - If Admin, only if admin and user are associated with the same company
+  /* eslint-disable indent */
+  AdminAuthResponse.getAuthAdminForUser(
+        req.headers.authorization,
+        req.params.id,
+        req.method+' '+req.baseUrl + req.path,
+        (errPackage, authAdmin) => {
+
+    if (errPackage) {
+      // TODO: winston.log('warn', errPackage.error.toString());
+      console.log(errPackage.error.toString());
+      return res.status(errPackage.status).json(errPackage.res);
     }
 
-    return res.json({
-      success: true,
-      data: user
+    // Admin user authorization success, remove user
+    User.findByIdAndRemove(req.params.id, (err, user) => {
+      if (err || !user) {
+        if (err) console.log(err);
+        return res.status(404).json({
+          success: false,
+          errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
+        });
+      }
+
+      return res.json({
+        success: true,
+        data: user
+      });
     });
-  });
+  }); /* AdminAuthResponse.getAuthAdminForUser */
+  /* eslint-enable indent */
 };
 
 

@@ -36,7 +36,7 @@ module.exports = function(roles) {
           // else return res.status(401).end();
           else return res.status(403).json({
             success: false,
-            errors: [ `User role: ${user.role} not authorized for ${req.baseUrl}${req.path}` ]
+            errors: [ `User role: ${user.role} not authorized for ${req.method} ${req.baseUrl}${req.path}` ]
           }).end();
         }
 

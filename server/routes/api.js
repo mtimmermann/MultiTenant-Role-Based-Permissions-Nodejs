@@ -36,7 +36,7 @@ router.put('/users/profile', authCheck(), userController.updateProfile);
 router.put('/users/profile/password', authCheck(), userController.updateProfilePassword);
 
 // DELETE /api/users/:id
-router.delete('/users/:id', authCheck([Roles.siteAdmin]), userController.destroy);
+router.delete('/users/:id', authCheck([Roles.admin,Roles.siteAdmin]), userController.destroy);
 
 
 // GET /api/companies

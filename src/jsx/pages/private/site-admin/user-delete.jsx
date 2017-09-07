@@ -23,7 +23,8 @@ class UserDelete extends Component {
       if (data && data.success) {
         this.setState({ user: data.data });
       } else if (err) {
-        this.setState({ errors: [err.message] });
+        if (data.errors) this.setState({ errors: data.errors });
+        else this.setState({ errors: [err.message] });
       }
     });
   }

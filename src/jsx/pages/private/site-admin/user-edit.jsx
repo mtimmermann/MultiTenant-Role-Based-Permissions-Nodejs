@@ -59,7 +59,7 @@ class UserEdit extends Component {
     }, (err, results) => {
       if (err) {
         const result = results.user || results.companies;
-        if (result && result.errors && result.errors.length > 0) {
+        if (result && result.errors) {
           self.setState({ errors: result.errors });
         } else {
           self.setState({ errors: [err.message] });
