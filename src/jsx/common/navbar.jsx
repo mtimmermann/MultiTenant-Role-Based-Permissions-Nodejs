@@ -58,6 +58,7 @@ class NavBar extends React.Component {
                     <b className="caret" />
                   </a>
                   <ul className="dropdown-menu">
+                    <li><NavLink to="/admin1" activeClassName="active">Admin Page</NavLink></li>
                     <li><NavLink to="/siteadmin/companies" activeClassName="active">Company Admin</NavLink></li>
                     <li><NavLink to="/admin/users" activeClassName="active">All Users</NavLink></li>
                     <li><NavLink to="/siteadmin/companies/unassociated/users" activeClassName="active">Unassociated Users</NavLink></li>
