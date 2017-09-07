@@ -44,7 +44,8 @@ class MainRoutes extends React.Component {
             <Route exact path="/admin1" userRoles="Admin,SiteAdmin" component={Admin1} />
 
             <Route exact path="/admin/users" userRoles="Admin,SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
-            <Route exact path="/admin/users/edit/:id" userRoles="Admin,SiteAdmin" component={UserEdit} />
+{/*<Route exact path="/admin/users/edit/:id" userRoles="Admin,SiteAdmin" component={UserEdit} />*/}
+            <Route exact path="/admin/users/edit/:id" userRoles="Admin,SiteAdmin" render={(props) => (<UserEdit {...props} role={Auth.getRole()} />)} />
             <Route exact path="/admin/users/delete/:id" userRoles="Admin,SiteAdmin" component={UserDelete} />
             <Route exact path="/admin/users/password/:id" userRoles="Admin,SiteAdmin" component={UserPassword} />
 

@@ -24,6 +24,8 @@ router.get('/users', authCheck([Roles.admin,Roles.siteAdmin]), userController.li
 router.get('/users/:id', authCheck([Roles.admin,Roles.siteAdmin]), userController.find);
 
 // PUT /api/users
+//TODO:
+//router.put('/users', authCheck([Roles.admin,Roles.siteAdmin]), userController.updateUser);
 router.put('/users', authCheck([Roles.siteAdmin]), userController.updateUser);
 
 // PUT /api/users/password

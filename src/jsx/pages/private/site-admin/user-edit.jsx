@@ -42,13 +42,19 @@ class UserEdit extends Component {
   }
 
   componentWillMount() {
+
+
     const self = this;
     async.parallel({
       user: (callback) => {
         UserService.getUser(this.state.id, callback);
       },
       companies: (callback) => {
-        CompanyService.getCompanies(null, callback);
+        if (self.props.role === Roles.siteAdmin) {
+          CompanyService.getCompanies(null, callback);
+        } else { // Role: 'Admin'
+          callback(null, null);
+        }
       }
     }, (err, results) => {
       if (err) self.setState({ errors: [err.message] });
@@ -172,14 +178,16 @@ class UserEdit extends Component {
                     </select>
                   </div>
                 </div>
-                <div className="form-group">
-                  <label className="col-sm-2 control-label" htmlFor="company">Company</label>
-                  <div className="col-sm-10">
-                    <select className="form-control" id="company" name="company" value={this.state.user.company} onChange={this.changeInput} >
-                      {companyOptions}
-                    </select>
+                {this.props.role === Roles.siteAdmin &&
+                  <div className="form-group">
+                    <label className="col-sm-2 control-label" htmlFor="company">Company</label>
+                    <div className="col-sm-10">
+                      <select className="form-control" id="company" name="company" value={this.state.user.company} onChange={this.changeInput} >
+                        {companyOptions}
+                      </select>
+                    </div>
                   </div>
-                </div>
+                }
                 <div className="form-group">
                   <div className="col-sm-offset-2 col-sm-10">
                     <div>
@@ -210,6 +218,7 @@ UserEdit.propTypes = {
       id: PropTypes.string.isRequired
     })
   }).isRequired,
+  role: PropTypes.string.isRequired,
   history: PropTypes.shape({
     goBack: PropTypes.func.isRequired
   }).isRequired
