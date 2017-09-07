@@ -158,7 +158,7 @@ exports.updateProfilePassword = function(req, res, next) {
     }
 
     // Auth user id must match body.user.id
-    if (req.body.user.id !== authId) return res.status(401).end();
+    if (req.body.user.id !== authId) return res.status(403).end();
 
     savePassword(req.body.user.id, req.body.user.password, (err2, data) => {
       if (err2) {
@@ -179,14 +179,33 @@ exports.updatePassword = function(req, res, next) {
     return res.status(409).json({ success: false, errors: ['\'user\' param is required'] });
   }
 
-  savePassword(req.body.user.id, req.body.user.password, (err2, data) => {
-    if (err2) {
-      if (err2) console.log(err2);
-      return res.json({ success: false, errors: [err2.message] });
+  // Ensure the admin user is authorized to access and update the user data
+  // - If SiteAdmin, yes
+  // - If Admin, only if admin and user are associated with the same company
+  /* eslint-disable indent */
+  AdminAuthResponse.getAuthAdminForUser(
+        req.headers.authorization,
+        req.body.user.id,
+        req.method+' '+req.baseUrl + req.path,
+        (errPackage, authAdmin) => {
+
+    if (errPackage) {
+      // TODO: winston.log('warn', errPackage.error.toString());
+      console.log(errPackage.error.toString());
+      return res.status(errPackage.status).json(errPackage.res);
     }
 
-    return res.json({ success: true });
+    // Admin authorization successful, change password allowed
+    savePassword(req.body.user.id, req.body.user.password, (err2, data) => {
+      if (err2) {
+        if (err2) console.log(err2);
+        return res.json({ success: false, errors: [err2.message] });
+      }
+
+      return res.json({ success: true });
+    });
   });
+  /* eslint-enable indent */
 };
 
 
@@ -252,7 +271,7 @@ exports.updateProfile = function(req, res, next) {
     }
 
     const user = req.body.user;
-    if (user.id !== authId) return res.status(401).end();
+    if (user.id !== authId) return res.status(403).end();
 
     delete user.role;
     delete user.password;
