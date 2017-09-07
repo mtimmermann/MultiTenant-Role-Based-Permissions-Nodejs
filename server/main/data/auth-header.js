@@ -1,6 +1,15 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
 
+/**
+ * Get id from the authorization header token
+ *
+ * @param {string}   authHeader Encrypted token
+ * @param {function} callback (err, data)
+                     The function that is called after a service call
+                     error {object}: null if no error
+                     data {object}: The data set of a succesful call
+ */
 exports.getId = (authHeader, callback) => {
   if (!authHeader) return callback(new Error('authorization header not found'));
 

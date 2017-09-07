@@ -1,7 +1,8 @@
 const User = require('mongoose').model('User');
+const UserData = require('../../main/data/user-data');
 const Roles = require('../../../src/shared/roles');
 const utils = require('../../main/common/utils');
-const AuthHeader = require('../../main/common/auth-header');
+const AuthHeader = require('../../main/data/auth-header');
 const { validations } = require('../../config');
 const { ErrorTypes, ModelValidationError } = require('../../main/common/errors');
 
@@ -28,49 +29,88 @@ const { ErrorTypes, ModelValidationError } = require('../../main/common/errors')
  */
 exports.list = function(req, res, next) {
 
-  const pageOptions = {
-    page: req.query['page'] || 1,
-    limit: req.query['limit'] || 10000,
-    sort: req.query['sort'] || 'name asc',
-    populate: 'company'
-  };
+  UserData.getAuthUser(req.headers.authorization, (errAuthUser, authUser) => {
+    if (errAuthUser) {
+      // TODO: winston.log('error', err);
+      console.log(errAuthUser);
 
-  let filterOptions = {};
-  if (req.query['filter']) {
-    try {
-      const filterParam = JSON.parse(req.query['filter']);
-      if (Array.isArray(filterParam) && filterParam.length > 0) {
-        filterParam.forEach((item) => {
-          filterOptions[item.id] = new RegExp(item.value, 'i');
-        });
-      }
-    } catch (err) {
-      console.log('Could not parse \'filter\' param '+ err.message);
-    }
-  }
-
-  const companyId = req.query['companyId'];
-  if (companyId) {
-    if (companyId.toLowerCase() === 'unassociated') {
-      // filterOptions.company = { $exists: false };
-      filterOptions.company = null;
-    } else {
-      filterOptions.company = companyId;
-    }
-  }
-
-  // User.find({}, '-password -__v', (err, users) => {
-  User.paginate(filterOptions, pageOptions, (err, result) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({
+      return res.status(409).json({
         success: false,
-        errors: [JSON.stringify(err)]
+        errors: [ errAuthUser.message ]
       });
     }
 
-    result.success = true;
-    return res.json(result);
+    // If the authUser is Role: 'Admin', user must be associated with a company;
+    //  if not, reject the request.
+    if (authUser.role === Roles.admin && !authUser.company) {
+      const user = { id: authUser.id, name: authUser.name, email: authUser.email, role: authUser.role };
+      const message = `'Admin' user ${JSON.stringify(user)} is not associated `+
+        `with a Company. Not authorized to request user list from ${req.baseUrl}${req.path}`;
+      // TODO: winston.log('warn', message);
+      console.log(message);
+
+      return res.status(403).json({
+        success: false,
+        errors: [ message ]
+      });
+    }
+
+
+    const pageOptions = {
+      page: req.query['page'] || 1,
+      limit: req.query['limit'] || 10000,
+      sort: req.query['sort'] || 'name asc'
+      // populate: 'company' -> only for role: SiteAdmin
+    };
+    if (authUser.role === Roles.siteAdmin) pageOptions.populate = 'company';
+
+
+    const filterOptions = {};
+    if (req.query['filter']) {
+      try {
+        const filterParam = JSON.parse(req.query['filter']);
+        if (Array.isArray(filterParam) && filterParam.length > 0) {
+          filterParam.forEach((item) => {
+            filterOptions[item.id] = new RegExp(item.value, 'i');
+          });
+        }
+      } catch (err) {
+        console.log('Could not parse \'filter\' param '+ err.message);
+      }
+    }
+
+    if (authUser.role === Roles.admin) {
+
+      // user Role: 'Admin', only retrieve associated company data
+      filterOptions.company = authUser.company.id;
+
+    } else if (authUser.role === Roles.siteAdmin) {
+
+      let companyId = req.query['companyId'];
+      if (companyId) {
+        if (companyId.toLowerCase() === 'unassociated') {
+          // filterOptions.company = { $exists: false };
+          filterOptions.company = null;
+        } else {
+          filterOptions.company = companyId;
+        }
+      }
+    }
+
+    // User.find({}, '-password -__v', (err, users) => {
+    User.paginate(filterOptions, pageOptions, (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          errors: [JSON.stringify(err)]
+        });
+      }
+
+      result.success = true;
+      return res.json(result);
+    });
+
   });
 };
 
@@ -104,12 +144,13 @@ exports.updateProfilePassword = function(req, res, next) {
     return res.status(409).json({ success: false, errors: ['\'user\' param is required'] });
   }
 
-  AuthHeader.getId(req.headers.authorization, function(err, authId) {
+  AuthHeader.getId(req.headers.authorization, (err, authId) => {
     if (err) {
       console.log(err);
       return res.status(409).json({ success: false, errors: [err.message] });
     }
 
+    // Auth user id must match body.user.id
     if (req.body.user.id !== authId) return res.status(401).end();
 
     savePassword(req.body.user.id, req.body.user.password, (err2, data) => {
@@ -151,7 +192,7 @@ exports.updateUser = function(req, res, next) {
   const user = req.body.user;
   delete user.password;
 
-  updateUser(user, (err, data) => {
+  updateUser(user, true /* isRoleRequired */, (err, data) => {
     if (err) {
       if (err.name && err.name === ErrorTypes.ModelValidation) {
         // TODO: winston.log('info', err.toString());
@@ -187,7 +228,7 @@ exports.updateProfile = function(req, res, next) {
     delete user.role;
     delete user.password;
 
-    updateUser(user, (err, data) => {
+    updateUser(user, false /* isRoleRequired */, (err, data) => {
       if (err) {
         if (err.name && err.name === ErrorTypes.ModelValidation) {
           // TODO: winston.log('info', err.toString());
@@ -249,9 +290,9 @@ function savePassword(userId, password, callback) {
   });
 }
 
-function updateUser(user, callback) {
+function updateUser(user, isRoleRequired, callback) {
 
-  validateUser(user, (errValdation, u) => {
+  validateUser(user, isRoleRequired, (errValdation, u) => {
     if (errValdation) return callback (errValdation);
 
     User.findOneAndUpdate({ _id: u.id }, u, (err, data) => {
@@ -262,7 +303,7 @@ function updateUser(user, callback) {
   });
 }
 
-function validateUser(user, callback) {
+function validateUser(user, isRoleRequired, callback) {
 
   user.name = typeof user.name === 'string' ? user.name.trim() : null;
   if (!user.name || (user.name && user.name.length === 0)) {
@@ -283,7 +324,7 @@ function validateUser(user, callback) {
     if (!Roles.isValidRole(user.role)) {
       return callback(new ModelValidationError(`user.role '${user.role}' is not a valid role`));
     }
-  } else {
+  } else if (isRoleRequired) {
     return callback(new ModelValidationError('user.role is required'));
   }
 

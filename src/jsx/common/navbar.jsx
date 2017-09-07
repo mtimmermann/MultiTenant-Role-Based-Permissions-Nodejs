@@ -40,7 +40,16 @@ class NavBar extends React.Component {
               <li><NavLink to="/public1" activeClassName="active">Public</NavLink></li>
               {isAuthenticated && <li><NavLink to="/private1" activeClassName="active">Private</NavLink></li> }
               {isAuthenticated && user.role === Roles.admin &&
-                <li><NavLink to="/admin1" activeClassName="active">Admin</NavLink></li>
+                <li className="dropdown">
+                  <a className="dropdown-toggle" href="#" data-toggle="dropdown">
+                    Admin
+                    <b className="caret" />
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li><NavLink to="/admin1" activeClassName="active">Admin Page</NavLink></li>
+                    <li><NavLink to="/admin/users" activeClassName="active">Users</NavLink></li>
+                  </ul>
+                </li>
               }
               {isAuthenticated && user.role === Roles.siteAdmin &&
                 <li className="dropdown">
