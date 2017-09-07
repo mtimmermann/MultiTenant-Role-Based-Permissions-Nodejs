@@ -42,11 +42,11 @@ class MainRoutes extends React.Component {
             <Route exact path="/private1" component={Private1} />
 
             <Route exact path="/admin1" userRoles="Admin,SiteAdmin" component={Admin1} />
-            <Route exact path="/admin/users" userRoles="Admin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
 
-            <Route exact path="/admin/users/edit/:id" userRoles="SiteAdmin" component={UserEdit} />
-            <Route exact path="/admin/users/delete/:id" userRoles="SiteAdmin" component={UserDelete} />
-            <Route exact path="/admin/users/password/:id" userRoles="SiteAdmin" component={UserPassword} />
+            <Route exact path="/admin/users" userRoles="Admin,SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
+            <Route exact path="/admin/users/edit/:id" userRoles="Admin,SiteAdmin" component={UserEdit} />
+            <Route exact path="/admin/users/delete/:id" userRoles="Admin,SiteAdmin" component={UserDelete} />
+            <Route exact path="/admin/users/password/:id" userRoles="Admin,SiteAdmin" component={UserPassword} />
 
             <Route exact path="/siteadmin/companies" userRoles="SiteAdmin" render={(props) => (<Companies {...props} role={Auth.getRole()} />)} />
             <Route exact path="/siteadmin/companies/new" userRoles="SiteAdmin" render={(props) => (<CompanyNew {...props} role={Auth.getRole()} />)} />
@@ -54,8 +54,6 @@ class MainRoutes extends React.Component {
             <Route exact path="/siteadmin/companies/delete/:id" userRoles="SiteAdmin" render={(props) => (<CompanyDelete {...props} role={Auth.getRole()} />)} />
 
             <Route exact path="/siteadmin/companies/:companyId/users" userRoles="SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
-
-            <Route exact path="/siteadmin/users" userRoles="SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
           </Switch>
         </PrivateRoutes>
 

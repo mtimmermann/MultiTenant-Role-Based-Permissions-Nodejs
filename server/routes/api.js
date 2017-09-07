@@ -21,7 +21,7 @@ router.get('/messages/admin1', authCheck([Roles.admin,Roles.siteAdmin]), message
 router.get('/users', authCheck([Roles.admin,Roles.siteAdmin]), userController.list);
 
 // GET /api/users/:id
-router.get('/users/:id', authCheck([Roles.siteAdmin]), userController.find);
+router.get('/users/:id', authCheck([Roles.admin,Roles.siteAdmin]), userController.find);
 
 // PUT /api/users
 router.put('/users', authCheck([Roles.siteAdmin]), userController.updateUser);

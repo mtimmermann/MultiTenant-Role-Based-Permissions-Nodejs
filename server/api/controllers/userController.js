@@ -1,8 +1,8 @@
+const AuthHeader = require('../../main/data/auth-header');
 const User = require('mongoose').model('User');
-const UserData = require('../../main/data/user-data');
+const UserAuthResponse = require('../../main/data/user-auth-response');
 const Roles = require('../../../src/shared/roles');
 const utils = require('../../main/common/utils');
-const AuthHeader = require('../../main/data/auth-header');
 const { validations } = require('../../config');
 const { ErrorTypes, ModelValidationError } = require('../../main/common/errors');
 
@@ -29,30 +29,16 @@ const { ErrorTypes, ModelValidationError } = require('../../main/common/errors')
  */
 exports.list = function(req, res, next) {
 
-  UserData.getAuthUser(req.headers.authorization, (errAuthUser, authUser) => {
-    if (errAuthUser) {
-      // TODO: winston.log('error', err);
-      console.log(errAuthUser);
+  /* eslint-disable indent */
+  UserAuthResponse.getAuthAdmin(
+        req.headers.authorization,
+        req.baseUrl + req.path,
+        (errPackage, authAdmin) => {
 
-      return res.status(409).json({
-        success: false,
-        errors: [ errAuthUser.message ]
-      });
-    }
-
-    // If the authUser is Role: 'Admin', user must be associated with a company;
-    //  if not, reject the request.
-    if (authUser.role === Roles.admin && !authUser.company) {
-      const user = { id: authUser.id, name: authUser.name, email: authUser.email, role: authUser.role };
-      const message = `'Admin' user ${JSON.stringify(user)} is not associated `+
-        `with a Company. Not authorized to request user list from ${req.baseUrl}${req.path}`;
-      // TODO: winston.log('warn', message);
-      console.log(message);
-
-      return res.status(403).json({
-        success: false,
-        errors: [ message ]
-      });
+    if (errPackage) {
+      // TODO: winston.log('warn', errPackage.error.toString());
+      console.log(errPackage.error.toString());
+      return res.status(errPackage.status).json(errPackage.res);
     }
 
 
@@ -62,7 +48,7 @@ exports.list = function(req, res, next) {
       sort: req.query['sort'] || 'name asc'
       // populate: 'company' -> only for role: SiteAdmin
     };
-    if (authUser.role === Roles.siteAdmin) pageOptions.populate = 'company';
+    if (authAdmin.role === Roles.siteAdmin) pageOptions.populate = 'company';
 
 
     const filterOptions = {};
@@ -75,17 +61,17 @@ exports.list = function(req, res, next) {
           });
         }
       } catch (err) {
+        // TODO: winston.log('error', err);
         console.log('Could not parse \'filter\' param '+ err.message);
       }
     }
 
-    if (authUser.role === Roles.admin) {
+    // If user Role: 'Admin', only retrieve associated company data
+    if (authAdmin.role === Roles.admin) {
+      filterOptions.company = authAdmin.company.id;
 
-      // user Role: 'Admin', only retrieve associated company data
-      filterOptions.company = authUser.company.id;
-
-    } else if (authUser.role === Roles.siteAdmin) {
-
+    // Else user Role: 'SiteAdmin', auth to retrieve all user data
+    } else if (authAdmin.role === Roles.siteAdmin) {
       let companyId = req.query['companyId'];
       if (companyId) {
         if (companyId.toLowerCase() === 'unassociated') {
@@ -110,30 +96,55 @@ exports.list = function(req, res, next) {
       result.success = true;
       return res.json(result);
     });
-
-  });
+  }); /* UserAuthResponse.getAuthAdmin */
+  /* eslint-enable indent */
 };
 
 
 // GET /api/users/:id
 exports.find = function(req, res, next) {
 
-  User.findById(req.params.id)
-    .populate('company')
-    .exec((err, user) => {
-      if (err || !user) {
-        if (err) console.log(err);
-        return res.status(404).json({
-          success: false,
-          errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
-        });
-      }
+  /* eslint-disable indent */
+  UserAuthResponse.getAuthAdmin(
+        req.headers.authorization,
+        req.baseUrl + req.path,
+        (errPackage, authAdmin) => {
 
-      return res.json({
-        success: true,
-        data: user
-      });
-    });
+    if (errPackage) {
+      // TODO: winston.log('warn', errPackage.error.toString());
+      console.log(errPackage.error.toString());
+      return res.status(errPackage.status).json(errPackage.res);
+    }
+
+    User.findById(req.params.id)
+      .populate('company')
+      .exec((err, user) => {
+        if (err || !user) {
+          if (err) console.log(err);
+          return res.status(404).json({
+            success: false,
+            errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
+          });
+        }
+
+        // If auth admin is not associated with the user's company; reject, not authorized
+        const notAuthCompErrPackage =
+          UserAuthResponse.adminCompanyNotAuthorized(
+            authAdmin,
+            user.company ? user.company.id : null); /* companyId */
+        if (notAuthCompErrPackage) {
+          // TODO: winston.log('warn', errPackage.error.toString());
+          console.log(notAuthCompErrPackage.error.toString());
+          return res.status(notAuthCompErrPackage.status).json(notAuthCompErrPackage.res);
+        }
+
+        return res.json({
+          success: true,
+          data: user
+        });
+    }); /* User.findById */
+  }); /* UserAuthResponse.getAuthAdmin */
+  /* eslint-enable indent */
 };
 
 

@@ -5,7 +5,8 @@
 const ErrorTypes = {
   ModelValidation: 'ModelValidation',
   NotAuthorized: 'NotAuthorized',
-  IncorrectCredentials: 'IncorrectCredentials'
+  IncorrectCredentials: 'IncorrectCredentials',
+  UserAuthResponse: 'UserAuthResponse'
 };
 
 class ModelValidationError extends Error {
@@ -32,9 +33,18 @@ class IncorrectCredentialsError extends Error {
   }
 }
 
+class UserAuthResponseError extends Error {
+  constructor(...args) {
+    super(...args);
+    Error.captureStackTrace(this, UserAuthResponseError);
+    this.name = ErrorTypes.UserAuthResponse;
+  }
+}
+
 module.exports = {
   ErrorTypes: ErrorTypes,
   ModelValidationError: ModelValidationError,
   NotAuthorizedError: NotAuthorizedError,
-  IncorrectCredentialsError: IncorrectCredentialsError
+  IncorrectCredentialsError: IncorrectCredentialsError,
+  UserAuthResponseError: UserAuthResponseError
 };

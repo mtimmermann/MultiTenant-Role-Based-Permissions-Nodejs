@@ -59,7 +59,7 @@ class NavBar extends React.Component {
                   </a>
                   <ul className="dropdown-menu">
                     <li><NavLink to="/siteadmin/companies" activeClassName="active">Company Admin</NavLink></li>
-                    <li><NavLink to="/siteadmin/users" activeClassName="active">All Users</NavLink></li>
+                    <li><NavLink to="/admin/users" activeClassName="active">All Users</NavLink></li>
                     <li><NavLink to="/siteadmin/companies/unassociated/users" activeClassName="active">Unassociated Users</NavLink></li>
                   </ul>
                 </li>

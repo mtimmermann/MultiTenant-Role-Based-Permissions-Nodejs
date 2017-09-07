@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import ReactTable from 'react-table';
-import Roles from '../../../../shared/roles';
+// import Roles from '../../../../shared/roles';
 import FormSubmitErrors from '../../../components/form-submit-errors';
 import UserService from '../../../services/user-service';
 import Utils from '../../../common/utils';
@@ -71,7 +71,7 @@ class Users extends Component {
 
   render() {
     const { data, pages, loading } = this.state;
-    const role = this.props.role;
+    // const role = this.props.role;
     const columns = [
       {
         Header: 'Name',
@@ -102,30 +102,30 @@ class Users extends Component {
         filterable: false
       }
     ];
-    if (role === Roles.siteAdmin) {
-      columns.push(
-        {
-          Header: 'Action',
-          accessor: 'id',
-          sortable: false,
-          filterable: false,
-          /* eslint-disable arrow-body-style */
-          Cell: row => (
-            <div>
-              <NavLink className="btn btn-default btn-xs" to={`/admin/users/edit/${row.value}`}>
-                <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
-                Edit
-              </NavLink>
-              <NavLink className="btn btn-default btn-xs m-l-xs" to={`/admin/users/delete/${row.value}`}>
-                <span className="glyphicon glyphicon-trash" aria-hidden="true" />
-                Delete
-              </NavLink>
-            </div>
-          )
-          /* eslint-enable arrow-body-style */
-        }
-      );
-    }
+    // if (role === Roles.siteAdmin) {
+    columns.push(
+      {
+        Header: 'Action',
+        accessor: 'id',
+        sortable: false,
+        filterable: false,
+        /* eslint-disable arrow-body-style */
+        Cell: row => (
+          <div>
+            <NavLink className="btn btn-default btn-xs" to={`/admin/users/edit/${row.value}`}>
+              <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
+              Edit
+            </NavLink>
+            <NavLink className="btn btn-default btn-xs m-l-xs" to={`/admin/users/delete/${row.value}`}>
+              <span className="glyphicon glyphicon-trash" aria-hidden="true" />
+              Delete
+            </NavLink>
+          </div>
+        )
+        /* eslint-enable arrow-body-style */
+      }
+    );
+    // }
 
     return (
       <div>
@@ -146,7 +146,7 @@ class Users extends Component {
   }
 }
 Users.propTypes = {
-  role: PropTypes.string.isRequired,
+  // role: PropTypes.string.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       companyId: PropTypes.string
