@@ -38,42 +38,9 @@ exports.getAuthAdmin = (authHeader, urlPath, callback) => {
     }
 
     // Get the Authenticated admin user
-    User.findById(authId)
-    .populate('company')
-    .exec((err, user) => {
-      if (err) {
-        // TODO: winston.log('error', userAuthError);
-        console.log(userAuthError);
-
-        const userAuthError = new UserAuthResponseError(err);
-        return callback(new ErrorAuthPackage(400, userAuthError));
-      }
-      if (!user) {
-        const userAuthError = new UserAuthResponseError(
-          `Auth Admin user.id ${authId} not found`);
-        return callback(new ErrorAuthPackage(400, userAuthError));
-      }
-
-      // If the authUser is Role: 'Admin', user must be associated
-      //  with a company; if not, reject the request.
-      if (user.role === Roles.admin && !user.company) {
-        const u = {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role
-        };
-        const message = `'Admin' user ${JSON.stringify(u)} is not associated `+
-          `with a Company. Not authorized for request ${urlPath}`;
-
-        // TODO: winston.log('warm', message);
-        console.log(message);
-
-        const userAuthError = new UserAuthResponseError(message);
-        return callback(new ErrorAuthPackage(403, userAuthError));
-      }
-
-      return callback(null, user);
+    findAdminUserResponse(authId, (errPackage, adminUser) => {
+      if (errPackage) return callback(errPackage); /* instaceof ErrorAuthPackage */
+      return callback(null, adminUser);
     });
   });
 };
