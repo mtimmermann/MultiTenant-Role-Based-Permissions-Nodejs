@@ -47,6 +47,7 @@ class NavBar extends React.Component {
                   </a>
                   <ul className="dropdown-menu">
                     <li><NavLink to="/admin1" activeClassName="active">Admin Page</NavLink></li>
+                    <li role="separator" className="divider" />
                     <li><NavLink to="/admin/users" activeClassName="active">Users</NavLink></li>
                   </ul>
                 </li>
@@ -59,9 +60,12 @@ class NavBar extends React.Component {
                   </a>
                   <ul className="dropdown-menu">
                     <li><NavLink to="/admin1" activeClassName="active">Admin Page</NavLink></li>
+                    <li role="separator" className="divider" />
                     <li><NavLink to="/siteadmin/companies" activeClassName="active">Company Admin</NavLink></li>
                     <li><NavLink to="/admin/users" activeClassName="active">All Users</NavLink></li>
                     <li><NavLink to="/siteadmin/companies/unassociated/users" activeClassName="active">Unassociated Users</NavLink></li>
+                    <li role="separator" className="divider" />
+                    <li><NavLink to="/siteadmin/logs?limit=200&start=0" activeClassName="active">Logs</NavLink></li>
                   </ul>
                 </li>
               }

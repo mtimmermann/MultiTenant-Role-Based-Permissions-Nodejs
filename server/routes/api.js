@@ -6,6 +6,8 @@ const Roles = require('../../src/shared/roles');
 const messageController = require('../api/controllers/messageController');
 const userController = require('../api/controllers/userController');
 const companyController = require('../api/controllers/companyController');
+const logController = require('../api/controllers/logController');
+
 
 // GET /api/messages/public1
 router.get('/messages/public1', messageController.getPublicMessage1);
@@ -56,6 +58,10 @@ router.put('/companies', authCheck([Roles.siteAdmin]), companyController.updateC
 
 // DELETE /api/companies/:id
 router.delete('/companies/:id', authCheck([Roles.siteAdmin]), companyController.destroy);
+
+
+// GET /api/companies
+router.get('/logs', authCheck([Roles.siteAdmin]), logController.list);
 
 
 module.exports = router;

@@ -25,6 +25,8 @@ import CompanyNew from '../pages/private/site-admin/company-new';
 import CompanyEdit from '../pages/private/site-admin/company-edit';
 import CompanyDelete from '../pages/private/site-admin/company-delete';
 
+import Logs from '../pages/private/site-admin/logs';
+
 class MainRoutes extends React.Component {
   render() {
     return (
@@ -54,6 +56,8 @@ class MainRoutes extends React.Component {
             <Route exact path="/siteadmin/companies/delete/:id" userRoles="SiteAdmin" render={(props) => (<CompanyDelete {...props} role={Auth.getRole()} />)} />
 
             <Route exact path="/siteadmin/companies/:companyId/users" userRoles="SiteAdmin" render={(props) => (<Users {...props} role={Auth.getRole()} />)} />
+
+            <Route exact path="/siteadmin/logs" userRoles="SiteAdmin" component={Logs} />
           </Switch>
         </PrivateRoutes>
 

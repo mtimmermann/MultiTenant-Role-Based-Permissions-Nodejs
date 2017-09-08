@@ -1,6 +1,7 @@
 const User = require('mongoose').model('User');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const logger = require('../main/common/logger');
 
 /**
  * Auth Checker middleware function.
@@ -33,8 +34,10 @@ module.exports = function(roles) {
 
         if (roles) {
           if (roles.indexOf(user.role) > -1) return next();
+
+          logger.info(`User role: ${user.role} not authorized for ${req.method} ${req.baseUrl}${req.path}`);
           // else return res.status(401).end();
-          else return res.status(403).json({
+          return res.status(403).json({
             success: false,
             errors: [ `User role: ${user.role} not authorized for ${req.method} ${req.baseUrl}${req.path}` ]
           }).end();

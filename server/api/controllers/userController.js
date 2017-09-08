@@ -92,7 +92,6 @@ exports.list = function(req, res, next) {
         });
       }
 
-logger.info(`users: ${JSON.stringify(result)}`);
       result.success = true;
       return res.json(result);
     });
@@ -119,7 +118,7 @@ exports.find = function(req, res, next) {
       .populate('company')
       .exec((err, user) => {
         if (err || !user) {
-          if (err) console.log(err);
+          if (err) logger.error(err);
           return res.status(404).json({
             success: false,
             errors: [ err ? err.message : `user id '${req.params.id} not found'` ]

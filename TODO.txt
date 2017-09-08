@@ -3,8 +3,11 @@ TODO:
 - Error types, ModelValidation, etc.
   - log error v.s. warn
 
-http://thisdavej.com/using-winston-a-versatile-logging-library-for-node-js/
 - winston logging db, file & console
+ - querying logs: https://github.com/winstonjs/winston#querying-logs
+
+- React JSON Tree
+https://github.com/alexkuz/react-json-tree
 
 
 DONE:
