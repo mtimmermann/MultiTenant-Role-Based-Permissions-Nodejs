@@ -85,7 +85,7 @@ exports.list = function(req, res, next) {
     // User.find({}, '-password -__v', (err, users) => {
     User.paginate(filterOptions, pageOptions, (err, result) => {
       if (err) {
-        console.log(err);
+        logger.error(err);
         return res.status(500).json({
           success: false,
           errors: [JSON.stringify(err)]
@@ -151,7 +151,7 @@ exports.updateProfilePassword = function(req, res, next) {
 
   AuthHeader.getId(req.headers.authorization, (err, authId) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(409).json({ success: false, errors: [err.message] });
     }
 
@@ -160,7 +160,7 @@ exports.updateProfilePassword = function(req, res, next) {
 
     savePassword(req.body.user.id, req.body.user.password, (err2, data) => {
       if (err2) {
-        if (err2) console.log(err2);
+        if (err2) logger.error(err2);
         return res.json({ success: false, errors: [err2.message] });
       }
 
@@ -195,7 +195,7 @@ exports.updatePassword = function(req, res, next) {
     // Admin authorization successful, change password allowed
     savePassword(req.body.user.id, req.body.user.password, (err2, data) => {
       if (err2) {
-        if (err2) console.log(err2);
+        if (err2) logger.error(err2);
         return res.json({ success: false, errors: [err2.message] });
       }
 
@@ -307,7 +307,7 @@ exports.destroy = function(req, res, next) {
     // Admin user authorization success, remove user
     User.findByIdAndRemove(req.params.id, (err, user) => {
       if (err || !user) {
-        if (err) console.log(err);
+        if (err) logger.error(err);
         return res.status(404).json({
           success: false,
           errors: [ err ? err.message : `user id '${req.params.id} not found'` ]
@@ -331,14 +331,14 @@ function savePassword(userId, password, callback) {
 
   utils.hash(password.trim(), (err, hash) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return callback(err);
     }
 
     const user = { password: hash };
     User.findOneAndUpdate({ _id: userId }, user, (err2, data) => {
       if (err2) {
-        console.log(err2);
+        logger.error(err2);
         return callback(err2);
       }
 

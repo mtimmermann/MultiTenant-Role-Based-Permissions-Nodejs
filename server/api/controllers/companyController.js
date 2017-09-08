@@ -3,6 +3,7 @@ const CompanyData = require('../../main/data/company-data');
 const User = require('mongoose').model('User');
 const subdomains = require('../../main/common/sub-domains');
 const { ErrorTypes, ModelValidationError } = require('../../main/common/errors');
+const logger = require('../../main/common/logger');
 
 // GET /api/companies
 // List companies, paginations options
@@ -24,13 +25,13 @@ exports.list = function(req, res, next) {
         });
       }
     } catch (err) {
-      console.log('Could not parse \'filter\' param '+ err);
+      logger.warn('Could not parse \'filter\' param '+ err);
     }
   }
 
   Company.paginate(filterOptions, pageOptions, (err, result) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).json({
         success: false,
         errors: [JSON.stringify(err)]
@@ -48,7 +49,7 @@ exports.find = function(req, res, next) {
 
   Company.findById(req.params.id, (err, company) => {
     if (err || !company) {
-      if (err) console.log(err);
+      if (err) logger.error(err);
       return res.status(404).json({
         success: false,
         errors: [ err ? err.message : `company id '${req.params.id} not found'` ]
@@ -69,7 +70,7 @@ exports.findBySubdomain = function(req, res, next) {
 
   CompanyData.findBySubdomain(req.params.subdomain, (err, company) => {
     if (err) {
-      if (err) console.log(err);
+      if (err) logger.error(err);
       return res.status(400).json({
         success: false,
         errors: [ err.message ]
@@ -93,14 +94,14 @@ exports.new = function(req, res, next) {
 
   validateCompany(req.body.company, (errValidation, company) => {
     if (errValidation) {
-      console.log(err);
+      logger.error(err);
       return res.json({ success: false, errors: [errValidation.message] });
     }
 
     const newCompany = new Company(company);
     newCompany.save((err) => {
       if (err) {
-        console.log(err);
+        logger.error(err);
         return res.json({ success: false, errors: [err.message] });
       }
 
@@ -121,13 +122,8 @@ exports.updateCompany = function(req, res, next) {
 
   updateCompany(company, (err, data) => {
     if (err) {
-      if (err.name && err.name === ErrorTypes.ModelValidation) {
-        // TODO: winston.log('info', err.toString());
-        console.log(err.toString());
-      } else {
-        // TODO: winston.log('error', err);
-        console.log(err);
-      }
+      if (err.name && err.name === ErrorTypes.ModelValidation) logger.info(err.toString());
+      else logger.error(err);
 
       return res.status(400).json({ success: false, errors: [err.message] });
     }
@@ -142,7 +138,7 @@ exports.destroy = function(req, res, next) {
 
   Company.findByIdAndRemove(req.params.id, (err, company) => {
     if (err || !company) {
-      if (err) console.log(err);
+      if (err) logger.error(err);
       return res.status(404).json({
         success: false,
         errors: [ err ? err.message : `company id '${req.params.id} not found'` ]
@@ -185,13 +181,11 @@ function updateCompany(company, callback) {
 function orphanUsers(companyId, callback) {
   User.update({company: companyId}, {company: null}, {multi: true}, (err, results) => {
     if (err) {
-      // TODO: winston.log('error', err);
-      console.log(err);
+      logger.error(err);
       return callback(err);
     }
 
-    // TODO: winston.log('info', `orphan user results: ${JSON.stringify(results)}`);
-    console.log(`orphan user results: ${JSON.stringify(results)}`);
+    logger.info(`orphan user results: ${JSON.stringify(results)}`);
     return callback(null);
   });
 }

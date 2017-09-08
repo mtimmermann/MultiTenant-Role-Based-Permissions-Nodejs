@@ -3,6 +3,7 @@ const User = require('mongoose').model('User');
 const Roles = require('../../../src/shared/roles');
 const { UserAuthResponseError } = require('../../main/common/errors');
 const async = require('async');
+const logger = require('../../main/common/logger');
 
 class ErrorAuthPackage {
   constructor(status, error) {
@@ -31,8 +32,7 @@ exports.getAuthAdmin = (authHeader, urlPath, callback) => {
   AuthHeader.getId(authHeader, (authHeaderErr, authId) => {
     if (authHeaderErr) {
       const userAuthError = new UserAuthResponseError(authHeaderErr);
-      // TODO: winston.log('error', userAuthError);
-      console.log(userAuthError);
+      logger.error(userAuthError);
 
       return callback(new ErrorAuthPackage(400, userAuthError));
     }
@@ -62,8 +62,7 @@ exports.getAuthAdminForUser = (authHeader, userId, urlPath, callback) => {
   AuthHeader.getId(authHeader, (authHeaderErr, authId) => {
     if (authHeaderErr) {
       const userAuthError = new UserAuthResponseError(authHeaderErr);
-      // TODO: winston.log('error', userAuthError);
-      console.log(userAuthError);
+      logger.error(userAuthError);
 
       return callback(new ErrorAuthPackage(400, userAuthError));
     }
@@ -78,16 +77,12 @@ exports.getAuthAdminForUser = (authHeader, userId, urlPath, callback) => {
         .populate('company')
         .exec((err, user) => {
           if (err || !user) {
-            if (err) {
-              // TODO: winston.log('error', err);
-              console.log(err);
-            }
+            if (err) { logger.error(err); }
             const userNotFoundErr = new UserAuthResponseError(`user.id ${userId} not found`);
             cb(new ErrorAuthPackage(404, userNotFoundErr));
           } else {
             cb(null, user);
           }
-
         });
       }
     }, (err, results) => {
@@ -182,8 +177,7 @@ function findAdminUserResponse(adminUserId, urlPath, callback) {
   .populate('company')
   .exec((err, adminUser) => {
     if (err) {
-      // TODO: winston.log('error', adminUserAuthError);
-      console.log(adminUserAuthError);
+      logger.error(adminUserAuthError);
 
       const userAuthError = new UserAuthResponseError(err);
       return callback(new ErrorAuthPackage(400, userAuthError));
@@ -206,8 +200,7 @@ function findAdminUserResponse(adminUserId, urlPath, callback) {
       const message = `'Admin' user ${JSON.stringify(u)} is not associated `+
         `with a Company. Not authorized for request ${urlPath}`;
 
-      // TODO: winston.log('warm', message);
-      console.log(message);
+      logger.warn(message);
 
       const userAuthError = new UserAuthResponseError(message);
       return callback(new ErrorAuthPackage(403, userAuthError));

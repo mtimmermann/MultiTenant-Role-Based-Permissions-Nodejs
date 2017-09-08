@@ -1,4 +1,5 @@
 const Company = require('mongoose').model('Company');
+const logger = require('./logger');
 
 module.exports = {
 
@@ -11,7 +12,7 @@ module.exports = {
     app.locals.subdomains = [];
 
     Company.find({}, (err, results) => {
-      if (err) console.log(err);
+      if (err) logger.error(err);
       else if (results) {
         app.locals.subdomains = [];
         results.forEach((item) => {

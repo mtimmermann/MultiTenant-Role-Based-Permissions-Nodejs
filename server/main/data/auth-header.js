@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
+const logger = require('../common/logger');
 
 /**
  * Get id from the authorization header token
@@ -19,7 +20,7 @@ exports.getId = (authHeader, callback) => {
   // Decode the token using a secret key-phrase
   return jwt.verify(token, config.jwtSecret, (err, decoded) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return callback(err);
     }
 

@@ -147,8 +147,6 @@ class UserEdit extends Component {
     const validation = this.state.validation;
     const roleOptions = [];
     Roles.map().forEach((role) => {
-      console.log(`role.value === Roles.siteAdmin -> ${role.value === Roles.siteAdmin}`);
-      console.log(`this.props.role === Roles.siteAdmin -> ${this.props.role === Roles.siteAdmin}`);
       if (role.value === Roles.siteAdmin && this.props.role !== Roles.siteAdmin) {
         return; // skip
       }

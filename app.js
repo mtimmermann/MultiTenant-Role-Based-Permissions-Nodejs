@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const config = require('./server/config');
+const logger = require('./server/main/common/logger');
 
 // Connect to the database and load models
 require('./server/models').connect(config.dbUri);
@@ -75,7 +76,7 @@ app.get('*', function (req, res, next) {
 // Error handler
 app.use(function(err, req, res, next) {
 
-  console.log(err);
+  logger.error(err);
 
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -91,4 +92,4 @@ app.use(function(err, req, res, next) {
  * Listen on provided port, on all network interfaces.
  */
 http.listen(port);
-console.log('Server started on port ' + port);
+logger.info('Server started on port ' + port);
