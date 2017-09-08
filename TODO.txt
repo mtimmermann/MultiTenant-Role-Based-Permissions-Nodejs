@@ -3,7 +3,8 @@ TODO:
 - Error types, ModelValidation, etc.
   - log error v.s. warn
 
-- winston logging db & file
+http://thisdavej.com/using-winston-a-versatile-logging-library-for-node-js/
+- winston logging db, file & console
 
 
 DONE:

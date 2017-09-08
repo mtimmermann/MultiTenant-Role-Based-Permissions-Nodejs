@@ -5,6 +5,7 @@ const Roles = require('../../../src/shared/roles');
 const utils = require('../../main/common/utils');
 const { validations } = require('../../config');
 const { ErrorTypes, ModelValidationError } = require('../../main/common/errors');
+const logger = require('../../main/common/logger');
 
 /**
  * List users, optional pagination options
@@ -36,8 +37,7 @@ exports.list = function(req, res, next) {
         (errPackage, authAdmin) => {
 
     if (errPackage) {
-      // TODO: winston.log('warn', errPackage.error.toString());
-      console.log(errPackage.error.toString());
+      logger.warn(errPackage.error.toString());
       return res.status(errPackage.status).json(errPackage.res);
     }
 
@@ -61,8 +61,7 @@ exports.list = function(req, res, next) {
           });
         }
       } catch (err) {
-        // TODO: winston.log('error', err);
-        console.log('Could not parse \'filter\' param '+ err.message);
+        logger.error('Could not parse \'filter\' param '+ err.message);
       }
     }
 
@@ -93,6 +92,7 @@ exports.list = function(req, res, next) {
         });
       }
 
+logger.info(`users: ${JSON.stringify(result)}`);
       result.success = true;
       return res.json(result);
     });
@@ -111,8 +111,7 @@ exports.find = function(req, res, next) {
         (errPackage, authAdmin) => {
 
     if (errPackage) {
-      // TODO: winston.log('warn', errPackage.error.toString());
-      console.log(errPackage.error.toString());
+      logger.warn(errPackage.error.toString());
       return res.status(errPackage.status).json(errPackage.res);
     }
 
@@ -190,8 +189,7 @@ exports.updatePassword = function(req, res, next) {
         (errPackage, authAdmin) => {
 
     if (errPackage) {
-      // TODO: winston.log('warn', errPackage.error.toString());
-      console.log(errPackage.error.toString());
+      logger.warn(errPackage.error.toString());
       return res.status(errPackage.status).json(errPackage.res);
     }
 
@@ -229,8 +227,7 @@ exports.updateUser = function(req, res, next) {
         (errPackage, authAdmin) => {
 
     if (errPackage) {
-      // TODO: winston.log('warn', errPackage.error.toString());
-      console.log(errPackage.error.toString());
+      logger.warn(errPackage.error.toString());
       return res.status(errPackage.status).json(errPackage.res);
     }
 
@@ -239,11 +236,9 @@ exports.updateUser = function(req, res, next) {
     updateUser(user, true /* isRoleRequired */, (err, data) => {
       if (err) {
         if (err.name && err.name === ErrorTypes.ModelValidation) {
-          // TODO: winston.log('info', err.toString());
-          console.log(err.toString());
+          logger.info(err.toString());
         } else {
-          // TODO: winston.log('error', err);
-          console.log(err);
+          logger.error(err);
         }
 
         return res.status(400).json({ success: false, errors: [err.message] });
@@ -265,8 +260,7 @@ exports.updateProfile = function(req, res, next) {
 
   AuthHeader.getId(req.headers.authorization, function(err, authId) {
     if (err) {
-      // TODO: winston.log('error', err);
-      console.log(err);
+      logger.error(err);
       return res.status(409).json({ success: false, errors: [err.message] });
     }
 
@@ -279,11 +273,9 @@ exports.updateProfile = function(req, res, next) {
     updateUser(user, false /* isRoleRequired */, (err, data) => {
       if (err) {
         if (err.name && err.name === ErrorTypes.ModelValidation) {
-          // TODO: winston.log('info', err.toString());
-          console.log(err.toString());
+          logger.info(err.toString());
         } else {
-          // TODO: winston.log('error', err);
-          console.log(err);
+          logger.error(err);
         }
 
         return res.status(400).json({ success: false, errors: [err.message] });
@@ -309,8 +301,7 @@ exports.destroy = function(req, res, next) {
         (errPackage, authAdmin) => {
 
     if (errPackage) {
-      // TODO: winston.log('warn', errPackage.error.toString());
-      console.log(errPackage.error.toString());
+      logger.warn(errPackage.error.toString());
       return res.status(errPackage.status).json(errPackage.res);
     }
 

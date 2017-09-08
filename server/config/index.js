@@ -5,6 +5,10 @@ module.exports = {
   // DB
   dbUri: 'mongodb://localhost/multi-tenant',
 
+  logging: {
+    dbUri: 'mongodb://localhost/multi-tenant-logs'
+  },
+
   // jsonwebtoken secret
   jwtSecret: '!!secret phrase!!',
 
