@@ -22,6 +22,7 @@ class Logs extends Component {
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
+    // this.changeMessageFilter = this.changeMessageFilter.bind(this);
     this.shouldExpandNode = this.shouldExpandNode.bind(this);
   }
 
@@ -91,23 +92,55 @@ class Logs extends Component {
     this.setState({ display: { tree: !this.state.display.tree } });
   }
 
+  // changeMessageFilter(evt) {
+  //   const value = evt.target.value;
+  //   this.setState({ filter: { message: value } });
+  // }
+
   render() {
     const { infoExpanded } = this.state;
     const displayTree = this.state.display.tree;
     return (
       <div>
         <div>
-          <h5>
-            Query Param Options
-            <NavLink className="btn btn-default btn-xs m-l-xs" to="#" onClick={(evt) => { this._toggleInfo(evt); }}>
-              <span className={'glyphicon glyphicon-'+ (infoExpanded ? 'minus' : 'plus')} aria-hidden="true" />
-              {infoExpanded ? ' Hide' : ' Show'}
-            </NavLink>
-            <NavLink className="btn btn-default btn-xs m-l-lg" to="#" onClick={(evt) => { this._toggleDisplay(evt); }}>
-              <span className={'glyphicon glyphicon-'+ (displayTree ? 'list' : 'tree-conifer')} aria-hidden="true" />
-              {displayTree ? ' Display Raw' : ' Display Tree'}
-            </NavLink>
-          </h5>
+          <div className="row">
+            <div className="col-sm-3 col-md-3 col-lg-3">
+              <h5>
+                Query Param Options
+                <NavLink className="btn btn-default btn-xs m-l-xs" to="#" onClick={(evt) => { this._toggleInfo(evt); }}>
+                  <span className={'glyphicon glyphicon-'+ (infoExpanded ? 'minus' : 'plus')} aria-hidden="true" />
+                  {infoExpanded ? ' Hide' : ' Show'}
+                </NavLink>
+                <NavLink className="btn btn-default btn-xs m-l-lg" to="#" onClick={(evt) => { this._toggleDisplay(evt); }}>
+                  <span className={'glyphicon glyphicon-'+ (displayTree ? 'list' : 'tree-conifer')} aria-hidden="true" />
+                  {displayTree ? ' Display Raw' : ' Display Tree'}
+                </NavLink>
+              </h5>
+            </div>
+            {/*
+            <div className="col-sm-4 col-md-4 col-lg-4">
+              <div className="form-horizontal m-t-xs" onSubmit={this.submit}>
+                <div className="form-group m-b-none">
+                  <label
+                    className="col-sm-4
+                    control-label"
+                    htmlFor="messageFilter">Message Filter</label>
+                  <div className="col-sm-6">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="messageFilter"
+                      name="messageFilter"
+                      value={this.state.filter.message}
+                      placeholder="Message Filter"
+                      disabled={!displayTree}
+                      onChange={this.changeMessageFilter} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            */}
+          </div>
           <SmoothCollapse expanded={infoExpanded}>
             {/* eslint-disable react/no-unescaped-entities, max-len */}
             <div className="alert alert-info">
