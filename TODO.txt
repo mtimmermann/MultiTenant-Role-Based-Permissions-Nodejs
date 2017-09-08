@@ -6,8 +6,16 @@ TODO:
 - winston logging db, file & console
  - querying logs: https://github.com/winstonjs/winston#querying-logs
 
+
+
 - React JSON Tree
 https://github.com/alexkuz/react-json-tree
+
+- Other JSON Trees
+ - Filterable
+    https://github.com/Lapple/react-json-inspector
+
+https://github.com/chenglou/react-treeview
 
 - React json render (ligtweight)
 https://github.com/caldwell/renderjson
