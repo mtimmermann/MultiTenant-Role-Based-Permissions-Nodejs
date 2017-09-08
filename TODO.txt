@@ -9,6 +9,9 @@ TODO:
 - React JSON Tree
 https://github.com/alexkuz/react-json-tree
 
+- React json render (ligtweight)
+https://github.com/caldwell/renderjson
+
 
 DONE:
 - Site Branding
