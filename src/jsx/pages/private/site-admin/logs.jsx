@@ -67,11 +67,13 @@ class Logs extends Component {
     const filter = this.state.filter;
     if ((filter.level || filter.message) && level === 1 && (data.level || data.message)) {
       if (filter.level && filter.level === data.level) return true;
-      if (filter.message && data.message) {
+
+      if (filter.message) {
         const regex = new RegExp(filter.message, 'gi');
-        if (regex.test(data.message)) return true;
         if (data.meta && data.meta.message) {
           if (regex.test(data.meta.message)) return true;
+        } else if (data.message) {
+          if (regex.test(data.message)) return true;
         }
         return false;
       }
@@ -121,6 +123,8 @@ class Logs extends Component {
                 <li>Display Options</li>
                 <ul>
                   <li>raw: &#123;boolean&#125; - Display raw json when raw=true</li>
+                  <li>filter_level &#123;string&#125; - For tree display, expand only matches of this filter e.g. filter_level=error</li>
+                  <li>filter_messages &#123;string&#125; - For tree display, expand only regex case-insenstive matches of this filter e.g. filter_message=duplicate key</li>
                 </ul>
               </ul>
             </div>
