@@ -13,9 +13,6 @@ require('./server/models').connect(config.dbUri);
 const compression = require('compression'); // Compression middleware, compress responses from all routes
 const helmet = require('helmet'); // Protect against web vunerablities, http headers, https://www.npmjs.com/package/helmet
 
-const auth = require('./server/routes/auth');
-const api = require('./server/routes/api');
-
 const app = express();
 const http = require('http').createServer(app);
 
@@ -43,6 +40,11 @@ app.set('views', path.join(__dirname, '/server/views'));
 app.set('view engine', 'pug');
 
 
+// Define routes
+app.use('/auth', require('./server/routes/auth'));
+app.use('/api', require('./server/routes/api'));
+
+
 // Serve static assets normally
 // app.use(express.static(path.join(__dirname, '/dist')));
 
@@ -50,10 +52,6 @@ app.set('view engine', 'pug');
 app.get(/\.(\w+)$/, function (req, res, next) {
   res.sendFile(path.join(__dirname, 'dist', req.path));
 });
-
-// Define routes
-app.use('/auth', auth);
-app.use('/api', api);
 
 
 // Initialize the list of company subdomains
