@@ -31,14 +31,13 @@ const logger = new (winston.Logger) ({
       timestamp: tsFormat,
       datePattern: 'yyyy-MM-dd',
       prepend: true,
-      level: env === 'development' ? 'verbose' : 'info'
+      level: env === 'development' ? 'debug' : 'info'
     }),
     new (winston.transports.MongoDB)({
-      db: config.logging.dbUri
+      db: config.logging.dbUri,
+      level: env === 'development' ? 'debug' : 'info'
     })
   ]
 });
-
-logger.log('error', 'testing...');
 
 module.exports = logger;
