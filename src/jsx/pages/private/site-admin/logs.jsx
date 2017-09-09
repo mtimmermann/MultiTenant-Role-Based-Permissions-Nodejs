@@ -5,6 +5,11 @@ import JSONTree from 'react-json-tree';
 import SmoothCollapse from 'react-smooth-collapse';
 import Utils from '../../../common/utils';
 
+let origLogData = [];
+const messageFilter = {
+  timeout: null
+};
+
 class Logs extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +27,7 @@ class Logs extends Component {
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
-    // this.changeMessageFilter = this.changeMessageFilter.bind(this);
+    this.changeMessageFilter = this.changeMessageFilter.bind(this);
     this.shouldExpandNode = this.shouldExpandNode.bind(this);
   }
 
@@ -32,6 +37,7 @@ class Logs extends Component {
     LogService.getLogs(query, (err, result) => {
       if (err) console.log(err);
       else {
+        origLogData = result.data;
         this.setState({ logs: result.data });
       }
     });
@@ -92,10 +98,31 @@ class Logs extends Component {
     this.setState({ display: { tree: !this.state.display.tree } });
   }
 
-  // changeMessageFilter(evt) {
-  //   const value = evt.target.value;
-  //   this.setState({ filter: { message: value } });
-  // }
+  changeMessageFilter(evt) {
+    const filter = evt.target.value;
+    this.setState({ filter: { message: filter } });
+
+    // https://stackoverflow.com/questions/17318350/twitter-bootstrap-typeahead-delay
+    if (messageFilter.timeout) {
+      clearTimeout(messageFilter.timeout);
+    }
+    const self = this;
+    messageFilter.timeout = setTimeout(() => {
+      self.applyMessageFilter(filter);
+    }, 300);
+  }
+  applyMessageFilter(filter) {
+    // console.log(`applyMessageFilter: ${filter}`);
+    const regex = new RegExp(filter, 'gi');
+    const newLogs = [];
+    origLogData.forEach((row) => {
+      let include = false;
+      if (row.message && regex.test(row.message)) include = true;
+      else if (row.meta && row.meta.message && regex.test(row.meta.message)) include = true;
+      if (include) newLogs.push(row);
+    });
+    this.setState({ logs: newLogs });
+  }
 
   render() {
     const { infoExpanded } = this.state;
@@ -117,7 +144,6 @@ class Logs extends Component {
                 </NavLink>
               </h5>
             </div>
-            {/*
             <div className="col-sm-4 col-md-4 col-lg-4">
               <div className="form-horizontal m-t-xs" onSubmit={this.submit}>
                 <div className="form-group m-b-none">
@@ -133,13 +159,11 @@ class Logs extends Component {
                       name="messageFilter"
                       value={this.state.filter.message}
                       placeholder="Message Filter"
-                      disabled={!displayTree}
                       onChange={this.changeMessageFilter} />
                   </div>
                 </div>
               </div>
             </div>
-            */}
           </div>
           <SmoothCollapse expanded={infoExpanded}>
             {/* eslint-disable react/no-unescaped-entities, max-len */}
