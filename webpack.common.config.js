@@ -78,8 +78,9 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist'],
       {
-        verbose: true
+        verbose: true,
         // exclude: ['img/**/*'] // <- exclude does not work
+        exclude: ['client-branding']
       }
     ),
     new CopyWebpackPlugin([
