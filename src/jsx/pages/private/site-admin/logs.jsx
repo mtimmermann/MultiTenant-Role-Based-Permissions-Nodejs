@@ -115,12 +115,16 @@ class Logs extends Component {
     // console.log(`applyMessageFilter: ${filter}`);
     const regex = new RegExp(filter, 'gi');
     const newLogs = [];
-    origLogData.forEach((row) => {
+    for (let i=0; i< origLogData.length; i++) {
+      const row = origLogData[i];
       let include = false;
-      if (row.message && regex.test(row.message)) include = true;
-      else if (row.meta && row.meta.message && regex.test(row.meta.message)) include = true;
-      if (include) newLogs.push(row);
-    });
+      if (typeof row.message === 'string' && regex.test(row.message)) include = true;
+      else if (row.meta && typeof row.meta.message === 'string' &&
+        regex.test(row.meta.message)) include = true;
+      if (include) {
+        newLogs.push(row);
+      }
+    }
     this.setState({ logs: newLogs });
   }
 

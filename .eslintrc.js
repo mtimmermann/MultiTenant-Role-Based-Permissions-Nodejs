@@ -42,6 +42,7 @@ module.exports = {
     // 'no-param-reassign': ['error', { 'props': false }],
     'no-param-reassign': ['off'],
     'no-underscore-dangle': ['off'],
+    'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }],
 
     // curly: ['error', 'multi', 'consistent'],
     'brace-style': 2,
