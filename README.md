@@ -1,6 +1,8 @@
-# Boilerplate web app: Role Based Permissions, Passport local authentication, React, Node.js, Bootstrap, Webpack
+# Boilerplate Multi-Tenant web app: Role Based Permissions, Passport local authentication, React, Node.js, Bootstrap, Webpack
 
-Website boilterplate project setup with local passport authentication strategy and role based permissions.
+Multi-Tenant boiler plate website. Supports multiple client setup, multiple client branding.
+
+Project setup with local passport authentication strategy and role based permissions.
 
 Api routes are authorized with an encrypted JsonWebToken, each api route can be assigned allowable user roles for permissions.
 
@@ -81,6 +83,17 @@ npm run watch
 
 # For prod->
 npm run build:prod
+```
+
+Buld the dist/client-branding folder
+```sh
+# For dev ->
+npm run build:dev:branding
+# or to watch and build on the fly
+npm run watch:branding
+
+# For prod ->
+npm run build:prod:branding
 ```
 
 ----
