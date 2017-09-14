@@ -1,6 +1,6 @@
 # Boilerplate Multi-Tenant web app: Role Based Permissions, Passport local authentication, React, Node.js, Bootstrap, Webpack
 
-Multi-Tenant boiler plate website. Supports multiple client setup, multiple client branding.
+Multi-Tenant boiler plate website. Supports multiple client setup, multiple client branding.  Each tenant/client site contains it's own set of users and admins.
 
 Project setup with local passport authentication strategy and role based permissions.
 
@@ -70,6 +70,27 @@ siteAdmin: 'SiteAdmin',
 admin:     'Admin',
 user:      'User'
 ...
+```
+
+----
+
+#### Setting up Client Sites
+Client setup files are located in src/client-branding. There are three simple examples:
+src/client-branding
+	+ company123/
+	+ companyabc/
+	+ companyxyz
+
+To add a new client, add a new directory with corresponding index.html and site-branding.scss files
+
+Each client branding directory can be served up by adding /etc/hosts rules to serve up the client directories as subdomains.
+
+Example /etc/hosts setup (for local dev):
+```
+127.0.0.1 mutlitenant.com
+127.0.0.1 CompanyABC.mutlitenant.com
+127.0.0.1 CompanyXYZ.mutlitenant.com
+127.0.0.1 Company123.mutlitenant.com
 ```
 
 ----
