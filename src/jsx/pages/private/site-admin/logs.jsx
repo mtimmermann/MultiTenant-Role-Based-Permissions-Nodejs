@@ -190,7 +190,12 @@ class Logs extends Component {
                     control-label"
                     htmlFor="levelFilter">Log Level</label>
                   <div className="col-sm-6">
-                    <select className="form-control" id="levelFilter" name="levelFilter" value={this.state.filter.level} onChange={this.changeLevelFilter} >
+                    <select
+                      className="form-control"
+                      id="levelFilter"
+                      name="levelFilter"
+                      value={this.state.filter.level}
+                      onChange={this.changeLevelFilter} >
                       <option value="" />
                       <option value="error">error</option>
                       <option value="warn">warn</option>
