@@ -1,10 +1,6 @@
 
 TODO:
-- Error types, ModelValidation, etc.
-  - log error v.s. warn
 
-- winston logging db, file & console
- - querying logs: https://github.com/winstonjs/winston#querying-logs
 
 
 
@@ -22,6 +18,11 @@ https://github.com/caldwell/renderjson
 
 
 DONE:
+- Error types, ModelValidation, etc.
+  - log error v.s. warn
+
+- winston logging db, file & console
+ - querying logs: https://github.com/winstonjs/winston#querying-logs
 - Site Branding
   - SCSS
 - Company subdomain & name for non-auth pages

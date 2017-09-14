@@ -28,6 +28,7 @@ class Logs extends Component {
 
     this.componentWillMount = this.componentWillMount.bind(this);
     this.changeMessageFilter = this.changeMessageFilter.bind(this);
+    this.changeLevelFilter = this.changeLevelFilter.bind(this);
     this.shouldExpandNode = this.shouldExpandNode.bind(this);
   }
 
@@ -121,9 +122,22 @@ class Logs extends Component {
       if (typeof row.message === 'string' && regex.test(row.message)) include = true;
       else if (row.meta && typeof row.meta.message === 'string' &&
         regex.test(row.meta.message)) include = true;
-      if (include) {
-        newLogs.push(row);
-      }
+      if (include) newLogs.push(row);
+    }
+    this.setState({ logs: newLogs });
+  }
+
+  changeLevelFilter(evt) {
+    const filter = evt.target.value;
+    this.setState({ filter: { level: filter } });
+
+    const newLogs = [];
+    for (let i=0; i< origLogData.length; i++) {
+      const row = origLogData[i];
+      let include = false;
+      if (filter === '') include = true;
+      else if (row.level === filter) include = true;
+      if (include) newLogs.push(row);
     }
     this.setState({ logs: newLogs });
   }
@@ -149,7 +163,7 @@ class Logs extends Component {
               </h5>
             </div>
             <div className="col-sm-4 col-md-4 col-lg-4">
-              <div className="form-horizontal m-t-xs" onSubmit={this.submit}>
+              <div className="form-horizontal m-t-xs">
                 <div className="form-group m-b-none">
                   <label
                     className="col-sm-4
@@ -164,6 +178,24 @@ class Logs extends Component {
                       value={this.state.filter.message}
                       placeholder="Message Filter"
                       onChange={this.changeMessageFilter} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-4 col-md-4 col-lg-4">
+              <div className="form-horizontal m-t-xs">
+                <div className="form-group m-b-none">
+                  <label
+                    className="col-sm-4
+                    control-label"
+                    htmlFor="levelFilter">Log Level</label>
+                  <div className="col-sm-6">
+                    <select className="form-control" id="levelFilter" name="levelFilter" value={this.state.filter.level} onChange={this.changeLevelFilter} >
+                      <option value="" />
+                      <option value="error">error</option>
+                      <option value="warn">warn</option>
+                      <option value="info">info</option>
+                    </select>
                   </div>
                 </div>
               </div>
