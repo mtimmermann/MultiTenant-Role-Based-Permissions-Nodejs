@@ -125,7 +125,7 @@ Client setup files are located in src/client-branding. There are three simple ex
 src/client-branding
 	+ company123/
 	+ companyabc/
-	+ companyxyz
+	+ companyxyz/
 
 To add a new client, add a new directory with corresponding index.html and site-branding.scss files
 
