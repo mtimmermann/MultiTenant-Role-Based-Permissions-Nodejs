@@ -117,7 +117,7 @@ Only the Admin and SiteAdmin can access the User administration tool. The SiteAd
 To add a SiteAdmin, create a new user account from the /signup page. Then manually update the database, set that user role to 'SiteAdmin'
 
 ##### User Admin view. Server-side paging, sortable, search by text filtering.
-![alt-text](https://raw.githubusercontent.com/mtimmermann/Boilerplate-Role-Based-Permissions-Nodejs/master/screenshot-user-admin.png "User Admin")
+![alt-text](https://raw.githubusercontent.com/mtimmermann/MultiTenant-Role-Based-Permissions-Nodejs/master/screenshot-user-admin.png "User Admin")
 
 
 #### Setting up Client Sites
@@ -140,7 +140,7 @@ Example /etc/hosts setup (for local dev):
 ```
 
 Client sites must be added to the database using the Company Administration tool when logged in as a SiteAdmin.
-![alt-text](https://raw.githubusercontent.com/mtimmermann/Boilerplate-Role-Based-Permissions-Nodejs/master/screenshot-company-admin.png "Company Admin")
+![alt-text](https://raw.githubusercontent.com/mtimmermann/MultiTenant-Role-Based-Permissions-Nodejs/master/screenshot-company-admin.png "Company Admin")
 
 
 
