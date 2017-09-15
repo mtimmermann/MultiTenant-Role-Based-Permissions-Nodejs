@@ -68,6 +68,8 @@ module.exports = {
     'block-scoped-var': 'error',
     'consistent-return': 'error',
 
+     'import/no-unresolved': [2, { 'caseSensitive': false }],
+
     //'object-shorthand': ['error', 'consistent'],
 
     // Definition for rule 'jsx-a11y/href-no-hash' was not found

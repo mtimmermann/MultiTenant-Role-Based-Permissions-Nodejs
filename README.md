@@ -74,29 +74,6 @@ user:      'User'
 ...
 ```
 
-----
-
-#### Setting up Client Sites
-Client setup files are located in src/client-branding. There are three simple examples:
-src/client-branding
-	+ company123/
-	+ companyabc/
-	+ companyxyz
-
-To add a new client, add a new directory with corresponding index.html and site-branding.scss files
-
-Each client branding directory can be served up by adding /etc/hosts rules to serve up the client directories as subdomains.
-
-Example /etc/hosts setup (for local dev):
-```
-127.0.0.1 mutlitenant.com
-127.0.0.1 CompanyABC.mutlitenant.com
-127.0.0.1 CompanyXYZ.mutlitenant.com
-127.0.0.1 Company123.mutlitenant.com
-```
-
-
-
 
 ----
 
@@ -141,6 +118,30 @@ To add a SiteAdmin, create a new user account from the /signup page. Then manual
 
 ##### User Admin view. Server-side paging, sortable, search by text filtering.
 ![alt-text](https://raw.githubusercontent.com/mtimmermann/Boilerplate-Role-Based-Permissions-Nodejs/master/screenshot-user-admin.png "User Admin")
+
+
+#### Setting up Client Sites
+Client setup files are located in src/client-branding. There are three simple examples:
+src/client-branding
+	+ company123/
+	+ companyabc/
+	+ companyxyz
+
+To add a new client, add a new directory with corresponding index.html and site-branding.scss files
+
+Each client branding directory can be served up by adding /etc/hosts rules to serve up the client directories as subdomains.
+
+Example /etc/hosts setup (for local dev):
+```
+127.0.0.1 mutlitenant.com
+127.0.0.1 CompanyABC.mutlitenant.com
+127.0.0.1 CompanyXYZ.mutlitenant.com
+127.0.0.1 Company123.mutlitenant.com
+```
+
+Client sites must be added to the database using the Company Administration tool when logged in as a SiteAdmin.
+![alt-text](https://raw.githubusercontent.com/mtimmermann/Boilerplate-Role-Based-Permissions-Nodejs/master/screenshot-company-admin.png "Company Admin")
+
 
 
 ##### License
