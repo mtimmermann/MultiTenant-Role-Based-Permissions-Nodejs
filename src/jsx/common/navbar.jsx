@@ -29,7 +29,7 @@ class NavBar extends React.Component {
               {this.props.company.name ? (
                 this.props.company.name
               ) : (
-                <div>Passport React Node.js</div>
+                <div>Multi-Tenant React Node.js</div>
               )}
             </NavLink>
           </div>
@@ -76,7 +76,7 @@ class NavBar extends React.Component {
                 </a>
                 <ul className="dropdown-menu">
                   <li>
-                    <a href="" data-toggle="modal" data-target="#modal-about">About: Boilerplate Role Based Permissions</a>
+                    <a href="" data-toggle="modal" data-target="#modal-about">About: Multi-Tenant Role Based Permissions</a>
                   </li>
                   <li>
                     <a href="https://github.com/mtimmermann/Boilerplate-Role-Based-Permissions-Nodejs" target="_blank" rel="noopener noreferrer">Source Code on GitHub</a>

@@ -1,6 +1,8 @@
 # Boilerplate Multi-Tenant web app: Role Based Permissions, Passport local authentication, React, Node.js, Bootstrap, Webpack
 
-Multi-Tenant boiler plate website. Supports multiple client setup, multiple client branding.  Each tenant/client site contains it's own set of users and admins.
+Multi-Tenant boiler plate website. Supports multiple client setup, multiple client branding.  Each tenant/client site contains it's own set of users (role: 'User') and admins (role: 'Admin').
+
+The role of 'SiteAdmin' is not associated with any client, and has administration privileges for all clients/companies and all users.
 
 Project setup with local passport authentication strategy and role based permissions.
 
@@ -92,6 +94,9 @@ Example /etc/hosts setup (for local dev):
 127.0.0.1 CompanyXYZ.mutlitenant.com
 127.0.0.1 Company123.mutlitenant.com
 ```
+
+
+
 
 ----
 

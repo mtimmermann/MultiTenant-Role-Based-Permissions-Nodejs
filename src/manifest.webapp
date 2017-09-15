@@ -1,8 +1,8 @@
 {
 	"version": "1.0.0",
-	"name": "Boilerplate Role Based Permissions Nodejs",
+	"name": "Multi-Tenant Role Based Permissions Nodejs",
 	"launch_path": "/index.html",
-	"description": "Boilerplate role based permissions, local passport authentication",
+	"description": "Multi-Tenant role based permissions, local passport authentication",
 	"icons": {
 		"128": "/img/ico/icon-128x128.png"
 	},
@@ -18,8 +18,8 @@
 	},
 	"locales": {
 		"en": {
-			"name": "Boilerplate Role Based Permissions Nodejs",
-			"description": "Boilerplate role based permissions, local passport authentication"
+			"name": "Multi-Tenant Role Based Permissions Nodejs",
+			"description": "Multi-Tenant role based permissions, local passport authentication"
 		}
 	}
 }

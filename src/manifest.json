@@ -1,5 +1,5 @@
 {
-	"name": "Boilerplate Role Based Permissions Nodejs",
+	"name": "Multi-Tenant Role Based Permissions Nodejs",
 	"short_name": "Boilerplate",
 	"icons": [{
 				"src": "/img/ico/icon-128x128.png",
