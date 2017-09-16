@@ -68,6 +68,7 @@ class UserEdit extends Component {
         if (results.user && results.user.success) {
           const u = results.user.data;
           if (u.company) u.company = u.company._id;
+          else u.company = '';
           self.setState({ user: u });
 
           // Validate form after inputs are loaded

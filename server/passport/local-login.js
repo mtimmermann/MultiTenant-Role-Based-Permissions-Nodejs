@@ -26,7 +26,8 @@ module.exports = new PassportLocalStrategy({
   };
 
   // Find a user by email address
-  return User.findOne({ email: userData.email }, (err, user) => {
+  //return User.findOne({ email: userData.email }, (err, user) => {
+  return User.findOne({ email: { $regex: new RegExp(userData.email, 'i') }}, (err, user) => {
     if (err) return done(err);
 
     if (!user) {
