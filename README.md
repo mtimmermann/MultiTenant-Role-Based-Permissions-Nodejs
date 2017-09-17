@@ -143,6 +143,5 @@ Client sites must be added to the database using the Company Administration tool
 ![alt-text](https://raw.githubusercontent.com/mtimmermann/MultiTenant-Role-Based-Permissions-Nodejs/master/screenshot-company-admin.png "Company Admin")
 
 
-
 ##### License
 [MIT](LICENSE)
